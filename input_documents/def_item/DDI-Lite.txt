@@ -1,0 +1,504 @@
+Highlighted/bold elements comprise the DDI Lite, a list of recommended elements of the full DTD. I.e., those are the fields you really need to make your XML useable.
+
+DDI Lite -- for DDI Codebook Version 2.0
+
+* == ELEMENT IS OPTIONAL & REPEATABLE
++ == ELEMENT IS MANDATORY & REPEATABLE
+? == ELEMENT IS OPTIONAL & NON-REPEATABLE
+  == ELEMENT IS MANDATORY & NON-REPEATABLE
+
+0.0 codeBook (ATT == ID, xml-lang, source, version)
+|
+|---- 1.0 docDscr* (ATT == ID, xml-lang, source)
+|     |
+|     |---- 1.1 citation? (ATT == ID, xml-lang, source, MARCURI)
+|     |     |
+|     |     |---- 1.1.1 titlStmt (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.1.1.1 titl     (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.1.1.2 subTitl* (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.1.1.3 altTitl* (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.1.1.4 parTitl* (ATT == ID, xml-lang, source)
+|     |     |     +---- 1.1.1.5 IDNo*    (ATT == ID, xml-lang, source, agency, level)
+|     |     |
+|     |     |---- 1.1.2 rspStmt? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.1.2.1 AuthEnty*      (ATT == ID, xml-lang, source, affiliation)
+|     |     |     +---- 1.1.2.2 othId*         (ATT == ID, xml-lang, source, type, role,
+|     |     |                                          affiliation)
+|     |     |
+|     |     |---- 1.1.3 prodStmt? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.1.3.1 producer*     (ATT == ID, xml-lang, source,abbr, affiliation,
+|     |     |     |                                   role)
+|     |     |     |---- 1.1.3.2 copyright?    (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.1.3.3 prodDate*     (ATT == ID, xml-lang, source, date)
+|     |     |     |---- 1.1.3.4 prodPlac*     (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.1.3.5 software*     (ATT == ID, xml-lang, source, date, version)
+|     |     |     |---- 1.1.3.6 fundAg*       (ATT == ID, xml-lang, source, abbr, role)
+|     |     |     +---- 1.1.3.7 grantNo*      (ATT == ID, xml-lang, source, agency, role)
+|     |     |
+|     |     |---- 1.1.4 distStmt? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.1.4.1 distrbtr* (ATT == ID, xml-lang, source, abbr, affiliation, URI)
+|     |     |     |---- 1.1.4.2 contact*  (ATT == ID, xml-lang, source, affiliation, URI, email)
+|     |     |     |---- 1.1.4.3 depositr* (ATT == ID, xml-lang, source, abbr, affiliation)
+|     |     |     |---- 1.1.4.4 depDate*  (ATT == ID, xml-lang, source, date)
+|     |     |     +---- 1.1.4.5 distDate? (ATT == ID, xml-lang, source, date)
+|     |     |
+|     |     |---- 1.1.5 serStmt? (ATT == ID, xml-lang, source, URI)
+|     |     |     |
+|     |     |     |---- 1.1.5.1 serName* (ATT == ID, xml-lang, source, abbr)
+|     |     |     +---- 1.1.5.2 serInfo* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |---- 1.1.6 verStmt* (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.1.6.1 version? (ATT == ID, xml-lang, source, type, date)
+|     |     |     |---- 1.1.6.2 verResp? (ATT == ID, xml-lang, source, affiliation)
+|     |     |     +---- 1.1.6.3 notes*   (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |     |                                    sdatrefs)
+|     |     |
+|     |     |---- 1.1.7 biblCit?(ATT == ID, xml-lang, source, format)
+|     |     |---- 1.1.8 holdings* (ATT == ID, xml-lang, source, location, callno, URI, media)
+|     |     +---- 1.1.9 notes*    (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |                                   sdatrefs)
+|     |
+|     |---- 1.2 guide?     (ATT == ID, xml-lang, source)
+|     |---- 1.3 docStatus? (ATT == ID, xml-lang, source)
+|     |---- 1.4 docSrc*    (ATT == ID, xml-lang, source, MARCURI)
+|     |     |
+|     |     |---- 1.4.1 titlStmt (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.4.1.1 titl     (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.4.1.2 subTitl* (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.4.1.3 altTitl* (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.4.1.4 parTitl* (ATT == ID, xml-lang, source)
+|     |     |     +---- 1.4.1.5 IDNo*    (ATT == ID, xml-lang, source, agency, level)
+|     |     |
+|     |     |---- 1.4.2 rspStmt? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.4.2.1 AuthEnty*      (ATT == ID, xml-lang, source, affiliation)
+|     |     |     +---- 1.4.2.2 othId*         (ATT == ID, xml-lang, source, type, role, affiliation)
+|     |     |
+|     |     |---- 1.4.3 prodStmt? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.4.3.1 producer*     (ATT == ID, xml-lang, source,abbr, affiliation, role)
+|     |     |     |---- 1.4.3.2 copyright?    (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.4.3.3 prodDate*     (ATT == ID, xml-lang, source, date)
+|     |     |     |---- 1.4.3.4 prodPlac*     (ATT == ID, xml-lang, source)
+|     |     |     |---- 1.4.3.5 software*     (ATT == ID, xml-lang, source, date, version)
+|     |     |     |---- 1.4.3.6 fundAg*       (ATT == ID, xml-lang, source, abbr, role)
+|     |     |     +---- 1.4.3.7 grantNo*      (ATT == ID, xml-lang, source, agency, role)
+|     |     |
+|     |     |---- 1.4.4 distStmt? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.4.4.1 distrbtr* (ATT == ID, xml-lang, source, abbr, affiliation, URI)
+|     |     |     |---- 1.4.4.2 contact*(ATT == ID, xml-lang, source, affiliation, URI, email)
+|     |     |     |---- 1.4.4.3 depositr* (ATT == ID, xml-lang, source, abbr, affiliation)
+|     |     |     |---- 1.4.4.4 depDate*(ATT == ID, xml-lang, source, date)
+|     |     |     +---- 1.4.4.5 distDate? (ATT == ID, xml-lang, source, date)
+|     |     |
+|     |     |---- 1.4.5 serStmt? (ATT == ID, xml-lang, source, URI)
+|     |     |     |
+|     |     |     |---- 1.4.5.1 serName* (ATT == ID, xml-lang, source, abbr)
+|     |     |     +---- 1.4.5.2 serInfo* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |---- 1.4.6 verStmt* (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 1.4.6.1 version? (ATT == ID, xml-lang, source, type, date)
+|     |     |     |---- 1.4.6.2 verResp? (ATT == ID, xml-lang, source, affiliation)
+|     |     |     +---- 1.4.6.3 notes*   (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |     |                                    sdatrefs)
+|     |     |
+|     |     |---- 1.4.7 biblCit?(ATT == ID, xml-lang, source, format)
+|     |     |---- 1.4.8 holdings* (ATT == ID, xml-lang, source, location, callno, URI, media)
+|     |     +---- 1.4.9 notes*    (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|     |
+|     +---- 1.5 notes*     (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|
+|---- 2.0 stdyDscr+ (ATT == ID, xml-lang, source, access)
+|     |
+|     |---- 2.1 citation+ (ATT == ID, xml-lang, source, MARCURI)
+|     |     |
+|     |     |---- 2.1.1 titlStmt (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.1.1.1 titl     (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.1.1.2 subTitl* (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.1.1.3 altTitl* (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.1.1.4 parTitl* (ATT == ID, xml-lang, source)
+|     |     |     +---- 2.1.1.5 IDNo*    (ATT == ID, xml-lang, source, agency, level)
+|     |     |
+|     |     |---- 2.1.2 rspStmt? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.1.2.1 AuthEnty*      (ATT == ID, xml-lang, source, affiliation)
+|     |     |     +---- 2.1.2.2 othId*           (ATT == ID, xml-lang, source, type, role, affiliation)
+|     |     |
+|     |     |---- 2.1.3 prodStmt? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.1.3.1 producer*     (ATT == ID, xml-lang, source, abbr, affilation, role)
+|     |     |     |---- 2.1.3.2 copyright?    (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.1.3.3 prodDate*     (ATT == ID, xml-lang, source, date)
+|     |     |     |---- 2.1.3.4 prodPlac*     (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.1.3.5 software*     (ATT == ID, xml-lang, source, date, version)
+|     |     |     |---- 2.1.3.6 fundAg*       (ATT == ID, xml-lang, source, abbr, role)
+|     |     |     +---- 2.1.3.7 grantNo*      (ATT == ID, xml-lang, source, agency, role)
+|     |     |
+|     |     |---- 2.1.4 distStmt? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.1.4.1 distrbtr* (ATT == ID, xml-lang, source, abbr, affiliation, URI)
+|     |     |     |---- 2.1.4.2 contact*  (ATT == ID, xml-lang, source, affiliation, URI, email)
+|     |     |     |---- 2.1.4.3 depositr* (ATT == ID, xml-lang, source, abbr, affiliation)
+|     |     |     |---- 2.1.4.4 depDate*  (ATT == ID, xml-lang, source, date)
+|     |     |     +---- 2.1.4.5 distDate? (ATT == ID, xml-lang, source, date)
+|     |     |
+|     |     |---- 2.1.5 serStmt? (ATT == ID, xml-lang, source, URI)
+|     |     |     |
+|     |     |     |---- 2.1.5.1 serName* (ATT == ID, xml-lang, source, abbr)
+|     |     |     +---- 2.1.5.2 serInfo* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |---- 2.1.6 verStmt* (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.1.6.1 version? (ATT == ID, xml-lang, source, type, date)
+|     |     |     |---- 2.1.6.2 verResp? (ATT == ID, xml-lang, source, affiliation)
+|     |     |     +---- 2.1.6.3 notes*   (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |     |                                    sdatrefs)
+|     |     |
+|     |     |---- 2.1.7 biblCit?  (ATT == ID, xml-lang, source, format)
+|     |     |---- 2.1.8 holdings* (ATT == ID, xml-lang, source, location, callno, URI, media)
+|     |     +---- 2.1.9 notes*    (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|     |
+|     |---- 2.2 stdyInfo* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |---- 2.2.1 subject? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.2.1.1 keyword*  (ATT == ID, xml-lang, source, vocab, vocabURI)
+|     |     |     +---- 2.2.1.2 topcClas* (ATT == ID, xml-lang, source, vocab, vocabURI)
+|     |     |
+|     |     |---- 2.2.2 abstract* (ATT == ID, xml-lang, source, date)
+|     |     |
+|     |     |---- 2.2.3 sumDscr* (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.2.3.1 timePrd*   (ATT == ID, xml-lang, source, event, date, cycle)
+|     |     |     |---- 2.2.3.2 collDate*  (ATT == ID, xml-lang, source, event, date, cycle)
+|     |     |     |---- 2.2.3.3 nation*    (ATT == ID, xml-lang, source, abbr)
+|     |     |     |---- 2.2.3.4 geogCover* (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.2.3.5 geogUnit*  (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.2.3.6 geoBndBox? (ATT == ID, xml-lang, source)
+|     |     |     |     |
+|     |     |     |     |---- 2.2.3.6.1 westBL (ATT == ID, xml-lang, source)
+|     |     |     |     |---- 2.2.3.6.2 eastBL (ATT == ID, xml-lang, source)
+|     |     |     |     |---- 2.2.3.6.3 southBL (ATT == ID, xml-lang, source)
+|     |     |     |     +---- 2.2.3.6.4 northBL (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.2.3.7 boundPoly? (ATT == ID, xml-lang, source)
+|     |     |     |     |
+|     |     |     |     +---- 2.2.3.7.1 polygon+ (ATT == ID, xml-lang, source)
+|     |     |     |          |
+|     |     |     |          +---- 2.2.3.7.1.1 point+  (ATT == ID, xml-lang, source)
+|     |     |     |               |
+|     |     |     |               |---- 2.2.3.7.1.1.1 gringLat (ATT == ID, xml-lang, source)
+|     |     |     |               +---- 2.2.3.7.1.1.2 gringLon (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.2.3.8 anlyUnit*  (ATT == ID, xml-lang, source, unit)
+|     |     |     |---- 2.2.3.9 universe*  (ATT == ID, xml-lang, source, level, clusion)
+|     |     |     +---- 2.2.3.10 dataKind*  (ATT == ID, xml-lang, source)
+|     |     |
+|     |     +---- 2.2.4 notes* (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|     |
+|     |---- 2.3 method* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |---- 2.3.1 dataColl* (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.3.1.1 timeMeth*      (ATT == ID, xml-lang, source, method)
+|     |     |     |---- 2.3.1.2 dataCollector* (ATT == ID, xml-lang, source, abbr, affiliation)
+|     |     |     |---- 2.3.1.3 frequenc*      (ATT == ID, xml-lang, source, freq)
+|     |     |     |---- 2.3.1.4 sampProc*      (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.3.1.5 deviat*        (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.3.1.6 collMode*      (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.3.1.7 resInstru*     (ATT == ID, xml-lang, source, type)
+|     |     |     |---- 2.3.1.8 sources?       (ATT == ID, xml-lang, source)<-----+
+|     |     |     |     |                                                         |
+|     |     |     |     |---- 2.3.1.8.1 dataSrc* (ATT == ID, xml-lang, source)    |
+|     |     |     |     |---- 2.3.1.8.2 srcOrig* (ATT == ID, xml-lang, source)    |
+|     |     |     |     |---- 2.3.1.8.3 srcChar* (ATT == ID, xml-lang, source)    |
+|     |     |     |     |---- 2.3.1.8.4 srcDocu* (ATT == ID, xml-lang, source)    |
+|     |     |     |     +---- 2.3.1.8.5 sources* (ATT == ID, xml-lang, source) ---+
+|     |     |     |     NOTE: ELEMENT sources has recursive definition,
+|     |     |     |           so anywithin a codebook can
+|     |     |     |           themselves list multiple, subsidiary sources.
+|     |     |     |
+|     |     |     |---- 2.3.1.9 collSitu*      (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.3.1.10 actMin*       (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.3.1.11 ConOps*       (ATT == ID, xml-lang, source, agency)
+|     |     |     |---- 2.3.1.12 weight*       (ATT == ID, xml-lang, source)
+|     |     |     +---- 2.3.1.13 cleanOps*     (ATT == ID, xml-lang, source, agency)
+|     |     |
+|     |     |---- 2.3.2 notes*    (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|     |     |---- 2.3.3 anlyInfo? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.3.3.1 respRate*  (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.3.3.2 EstSmpErr* (ATT == ID, xml-lang, source)
+|     |     |     +---- 2.3.3.3 dataAppr*  (ATT == ID, xml-lang, source)
+|     |     |
+|     |     +---- 2.3.4 stdyClas? (ATT == ID, xml-lang, source, type)
+|     |
+|     |---- 2.4 dataAccs* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |---- 2.4.1 setAvail* (ATT == ID, xml-lang, source, media, callno, label, type)
+|     |     |     |
+|     |     |     |---- 2.4.1.1 accsPlac*  (ATT == ID, xml-lang, source, URI)
+|     |     |     |---- 2.4.1.2 origArch?  (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.4.1.3 avlStatus* (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.4.1.4 collSize?  (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.4.1.5 complete?  (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.4.1.6 fileQnty?  (ATT == ID, xml-lang, source)
+|     |     |     +---- 2.4.1.7 notes*     (ATT == ID, xml-lang, source, type, subject, level,
+|     |     |                                      resp, sdatrefs)
+|     |     |
+|     |     |-----2.4.2 useStmt* (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 2.4.2.1 confDec?    (ATT == ID, xml-lang, source, required, formNo, URI)
+|     |     |     |---- 2.4.2.2 specPerm?   (ATT == ID, xml-lang, source, required, formNo, URI)
+|     |     |     |---- 2.4.2.3 restrctn?   (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.4.2.4 contact*    (ATT == ID, xml-lang, source, affiliation, URI, email)
+|     |     |     |---- 2.4.2.5 citReq?     (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.4.2.6 deposReq?   (ATT == ID, xml-lang, source)
+|     |     |     |---- 2.4.2.7 conditions? (ATT == ID, xml-lang, source)
+|     |     |     +---- 2.4.2.8 disclaimer? (ATT == ID, xml-lang, source)
+|     |     |
+|     |     +---- 2.4.3 notes* (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|     |
+|     |---- 2.5 othrStdyMat* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |---- 2.5.1 relMat*(ATT == ID, xml-lang, source, callno, label, type, media)
+|     |     |     |
+|     |     |     +---- 2.5.1.1 citation* (ATT == ID, xml-lang, source, MARCURI)
+|     |     |
+|     |     |---- 2.5.2 relStdy* (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     +---- 2.5.2.1 citation* (ATT == ID, xml-lang, source, MARCURI)
+|     |     |
+|     |     |---- 2.5.3 relPubl* (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     +---- 2.5.3.1 citation* (ATT == ID, xml-lang, source, MARCURI)
+|     |     |
+|     |     +---- 2.5.4 othRefs* (ATT == ID, xml-lang, source)
+|     |           |
+|     |           +---- 2.5.4.1 citation* (ATT == ID, xml-lang, source, MARCURI)
+|     |                         NOTE: complete tree under citation element omitted for
+|     |                         reasons of space for 2.5.1.1, 2.5.2.1, 2.5.3.1, and 2.5.4.1
+|     |
+|     +---- 2.6 notes* (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|
+|
+|---- 3.0 fileDscr* (ATT == ID, xml-lang, source, URI, sdatrefs, methrefs, pubrefs, access)
+|     |
+|     |---- 3.1 fileTxt* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |---- 3.1.1 fileName? (ATT ==ID, xml-lang, source)
+|     |     |---- 3.1.2 fileCont? (ATT == ID, xml-lang, source)
+|     |     |---- 3.1.3 fileStrc? (ATT == ID, xml-lang, source, type)
+|     |     |     |
+|     |     |     |---- 3.1.3.1 recGrp* (ATT == ID, xml-lang, source, recGrp, rectype, keyvar,
+|     |     |     |     |                       recidvar, rtypeloc, rtypewidth, rtypevtype)
+|     |     |     |     |
+|     |     |     |     |---- 3.1.3.1.1 labl*      (ATT == ID, xml-lang, source, level, vendor, country, sdatrefs)
+|     |     |     |     +---- 3.1.3.1.2 recDimnsn? (ATT == ID, xml-lang, source, level)
+|     |     |     |           |
+|     |     |     |           |---- 3.1.3.1.2.1 varQnty?  (ATT == ID, xml-lang, source)
+|     |     |     |           |---- 3.1.3.1.2.2 caseQnty? (ATT == ID, xml-lang, source)
+|     |     |     |           +---- 3.1.3.1.2.3 logRecL?  (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     +---- 3.1.3.2 notes* (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |     |                                  sdatrefs)
+|     |     |
+|     |     |---- 3.1.4 dimensns? (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 3.1.4.1 caseQnty*  (ATT == ID, xml-lang, source)
+|     |     |     |---- 3.1.4.2 varQnty*   (ATT == ID, xml-lang, source)
+|     |     |     |---- 3.1.4.3 logRecL*   (ATT == ID, xml-lang, source)
+|     |     |     |---- 3.1.4.4 recPrCas*  (ATT == ID, xml-lang, source)
+|     |     |     +---- 3.1.4.5 recNumTot* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |---- 3.1.5 fileType?  (ATT == ID, xml-lang, source, charset)
+|     |     |---- 3.1.6 format?    (ATT == ID, xml-lang, source)
+|     |     |---- 3.1.7 filePlac?  (ATT == ID, xml-lang, source)
+|     |     |---- 3.1.8 dataChck*  (ATT == ID, xml-lang, source)
+|     |     |---- 3.1.9 ProcStat?  (ATT == ID, xml-lang, source)
+|     |     |---- 3.1.10 dataMsng? (ATT == ID, xml-lang, source)
+|     |     |---- 3.1.11 software* (ATT == ID, xml-lang, source, date, version)
+|     |     +---- 3.1.12 verStmt?  (ATT == ID, xml-lang, source)
+|     |           |
+|     |           |---- 3.1.12.1 version? (ATT == ID, xml-lang, source, type, date)
+|     |           |---- 3.1.12.2 verResp? (ATT == ID, xml-lang, source, affiliation)
+|     |           +---- 3.1.12.3 notes*   (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |                                           sdatrefs)
+|     |
+|     |---- 3.2 locMap? (ATT == ID, xml-lang, source)
+|     |     |
+|     |     +---- 3.2.1 dataItem*    (ATT == ID, xml-lang, source, varRef, nCubeRef)
+|     |           |
+|     |           |---- 3.2.1.1 CubeCoord*(ATT == ID, xml-lang, source, coordNo, coordVal,
+|     |           |                               coordValRef)
+|     |           |                      [coordValRef is the varRef to the var where the coordVal is stored]
+|     |           |
+|     |           +---- 3.2.1.2 physLoc*    (ATT == ID, xml-lang, source, type, recRef, startPos,
+|     |                                             width, endPos)
+|     |
+|     +---- 3.3 notes* (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|
+|---- 4.0 dataDscr* (ATT == ID, xml-lang, source)
+|     |
+|     |---- 4.1 varGrp* (ATT == ID, xml-lang, source, type, var, varGrp, name, sdatrefs, methrefs,
+|     |     |                   pubrefs, access)
+|     |     |---- 4.1.1 labl*     (ATT == ID, xml-lang, source, level, vendor, country, sdatrefs)
+|     |     |---- 4.1.2 txt*      (ATT == ID, xml-lang, source, level, sdatrefs)
+|     |     |---- 4.1.3 concept*  (ATT == ID, xml-lang, source, vocab, vocabURI)
+|     |     |---- 4.1.4 defntn?   (ATT == ID, xml-lang, source)
+|     |     |---- 4.1.5 universe? (ATT == ID, xml-lang, source, level, clusion)
+|     |     +---- 4.1.6 notes*    (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |                                   sdatrefs)
+|     |
+|     |---- 4.2 nCubeGrp* (ATT == ID, xml-lang, source, type, nCube, nCubeGrp, name, sdatrefs, methrefs,
+|     |     |                     pubrefs, access)
+|     |     |---- 4.2.1 labl*     (ATT == ID, xml-lang, source, level, vendor, country, sdatrefs)
+|     |     |---- 4.2.2 txt*      (ATT == ID, xml-lang, source, level, sdatrefs)
+|     |     |---- 4.2.3 concept*  (ATT == ID, xml-lang, source, vocab, vocabURI)
+|     |     |---- 4.2.4 defntn?   (ATT == ID, xml-lang, source)
+|     |     |---- 4.2.5 universe? (ATT == ID, xml-lang, source, level, clusion)
+|     |     +---- 4.2.6 notes*    (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |                                   sdatrefs)
+|     |
+|     |---- 4.3 var* (ATT == ID, xml-lang, source, name, wgt, wgt-var, weight, qstn, files,
+|     |     |                 vendor, dcml, intrvl, rectype, sdatrefs, methrefs, pubrefs,
+|     |     |                 access, aggrMeth, measUnit, scale, origin, nature, additivity, temporal, geog,
+|     |     |                 geoVocab, catQnty)
+|     |     |
+|     |     |---- 4.3.1 location*    (ATT == ID, xml-lang, source, StartPos, EndPos, width,
+|     |     |                                RecSegNo, fileid, locMap)
+|     |     |---- 4.3.2 labl*        (ATT == ID, xml-lang, source, level, vendor, country, sdatrefs)
+|     |     |---- 4.3.3 imputation?  (ATT == ID, xml-lang, source)
+|     |     |---- 4.3.4 security?    (ATT == ID, xml-lang, source, date)
+|     |     |---- 4.3.5 embargo?     (ATT == ID, xml-lang, source, date, event, format)
+|     |     |---- 4.3.6 respUnit?    (ATT == ID, xml-lang, source)
+|     |     |---- 4.3.7 anlysUnit?   (ATT == ID, xml-lang, source)
+|     |     |---- 4.3.8 qstn*        (ATT == ID, xml-lang, source, qstn, var, seqNo, sdatrefs)
+|     |     |     |
+|     |     |     |---- 4.3.8.1 preQTxt*  (ATT == ID, xml-lang, source)
+|     |     |     |---- 4.3.8.2 qstnLit*  (ATT == ID, xml-lang, source, sdatrefs)
+|     |     |     |---- 4.3.8.3 postQTxt* (ATT == ID, xml-lang, source)
+|     |     |     |---- 4.3.8.4 forward*  (ATT == ID, xml-lang, source, qstn)
+|     |     |     |---- 4.3.8.5 backward* (ATT == ID, xml-lang, source, qstn)
+|     |     |     +---- 4.3.8.6 ivuInstr* (ATT == ID, xml-lang, source)
+|     |     |
+|     |     |     NOTE: qstn ELEMENT may include mixed #PCDATA content.
+|     |     |
+|     |     |---- 4.3.9 valrng*        (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 4.3.9.1 range* (ATT == ID, xml-lang, source, UNITS, min, minExclusive
+|     |     |     |                            max, maxExclusive)
+|     |     |     |---- 4.3.9.2 item*  (ATT == ID, xml-lang, source, UNITS, VALUE)
+|     |     |     |---- 4.3.9.3 key?   (ATT == ID, xml-lang, source)
+|     |     |     +---- 4.3.9.4 notes* (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |     |                                  sdatrefs)
+|     |     |
+|     |     |---- 4.3.10 invalrng*     (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 4.3.10.1 range* (ATT == ID, xml-lang, source, UNITS, min, minExclusive
+|     |     |     |                             max, maxExclusive)
+|     |     |     |---- 4.3.10.2 item*  (ATT == ID, xml-lang, source, UNITS, VALUE)
+|     |     |     |---- 4.3.10.3 key?   (ATT == ID, xml-lang, source)
+|     |     |     +---- 4.3.10.4 notes* (ATT == ID, xml-lang, source, type, subject, level,
+|     |     |                                   resp, sdatrefs)
+|     |     |
+|     |     |---- 4.3.11 undocCod*   (ATT == ID, xml-lang, source)
+|     |     |---- 4.3.12 universe*   (ATT == ID, xml-lang, source, level, clusion)
+|     |     |---- 4.3.13 TotlResp?   (ATT == ID, xml-lang, source)
+|     |     |---- 4.3.14 sumStat*    (ATT == ID, xml-lang, source, wgtd, wgt-var, weight, type)
+|     |     |---- 4.3.15 txt*        (ATT == ID, xml-lang, source, level, sdatrefs)
+|     |     |---- 4.3.16 stdCatgry*  (ATT == ID, xml-lang, source, URI)
+|     |     |---- 4.3.17 catgryGrp*  (ATT == ID, xml-lang, source, missing, missType, catgry,
+|     |     |     |                          catGrp, levelno, levelnm, compl, excls)
+|     |     |     |
+|     |     |     |---- 4.3.17.1 labl*    (ATT == ID, xml-lang, source, level, vendor, country, sdatrefs)
+|     |     |     |---- 4.3.17.2 catStat* (ATT == ID, xml-lang, source, type, URI, sdatrefs, wgtd,
+|     |     |     |                               wgt-var, weight)
+|     |     |     +---- 4.3.17.3 txt*     (ATT == ID, xml-lang, source, level, sdatrefs)
+|     |     |
+|     |     |---- 4.3.18 catgry*     (ATT == ID, xml-lang, source, missing, missType, country,
+|     |     |     |                          sdatrefs, excls)
+|     |     |     |
+|     |     |     |---- 4.3.18.1 catValu? (ATT == ID, xml-lang, source)
+|     |     |     |---- 4.3.18.2 labl*    (ATT == ID, xml-lang, source, level, vendor, country, sdatrefs)
+|     |     |     |---- 4.3.18.3 txt*     (ATT == ID, xml-lang, source, level, sdatrefs)
+|     |     |     |---- 4.3.18.4 catStat* (ATT == ID, xml-lang, source, type, URI, sdatrefs, wgtd,
+|     |     |     |                               wgt-var, weight)
+|     |     |     +---- 4.3.18.5 mrow?      (ATT == ID, xml-lang, source)
+|     |     |          |
+|     |     |          +---- 4.3.18.5.1 mi*     (ATT == ID, xml-lang, source, varRef)
+|     |     |
+|     |     |---- 4.3.19 codInstr*   (ATT == ID, xml-lang, source)
+|     |     |---- 4.3.20 verStmt*    (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 4.3.20.1 version? (ATT == ID, xml-lang, source, type, date)
+|     |     |     |---- 4.3.20.2 verResp? (ATT == ID, xml-lang, source, affiliation)
+|     |     |     +---- 4.3.20.3 notes*   (ATT == ID, xml-lang, source, type, subject, level,
+|     |     |                                     resp, sdatrefs)
+|     |     |
+|     |     |---- 4.3.21 concept*    (ATT == ID, xml-lang, source, vocab, vocabURI)
+|     |     |---- 4.3.22 derivation? (ATT == ID, xml-lang, source, var)
+|     |     |     |
+|     |     |     |---- 4.3.22.1 drvdesc? (ATT == ID, xml-lang, source)
+|     |     |     +---- 4.3.22.2 drvcmd?  (ATT == ID, xml-lang, source, syntax)
+|     |     |
+|     |     |---- 4.3.23 varFormat?  (ATT == ID, xml-lang, source, type, formatname, schema,
+|     |     |                                category, URI)
+|     |     |
+|     |     |---- 4.3.24 geoMap* (ATT == ID, xml-lang, source, URI, mapformat, levelno)
+|     |     +---- 4.3.25 notes*      (ATT == ID, xml-lang, source, type, subject, level, resp,
+|     |                                      sdatrefs)
+|     |
+|     |---- 4.4 nCube*      (ATT == ID, xml-lang, source, name, sdatrefs, methrefs, pubrefs,
+|     |     |                       access, dmnsQnty, cellQnty)
+|     |     |---- 4.4.1 location*    (ATT == ID, xml-lang, source, StartPos, EndPos, width,
+|     |     |                                RecSegNo, fileid, locMap)
+|     |     |---- 4.4.2 labl*        (ATT == ID, xml-lang, source, level, vendor, country, sdatrefs)
+|     |     |---- 4.4.3 txt*         (ATT == ID, xml-lang, source, level, sdatrefs)
+|     |     |---- 4.4.4 universe*    (ATT == ID, xml-lang, source, level, clusion)
+|     |     |---- 4.4.5 imputation?  (ATT == ID, xml-lang, source)
+|     |     |---- 4.4.6 security?    (ATT == ID, xml-lang, source, date)
+|     |     |---- 4.4.7 embargo?     (ATT == ID, xml-lang, source, date, event, format)
+|     |     |---- 4.4.8 respUnit?    (ATT == ID, xml-lang, source)
+|     |     |---- 4.4.9 anlysUnit?   (ATT == ID, xml-lang, source)
+|     |     |---- 4.4.10 verStmt*    (ATT == ID, xml-lang, source)
+|     |     |     |
+|     |     |     |---- 4.4.10.1 version? (ATT == ID, xml-lang, source, type, date)
+|     |     |     |---- 4.4.10.2 verResp? (ATT == ID, xml-lang, source, affiliation)
+|     |     |     +---- 4.4.10.3 notes*   (ATT == ID, xml-lang, source, type, subject, level,
+|     |     |                                           resp, sdatrefs)
+|     |     |
+|     |     |---- 4.4.11 purpose?    (ATT == ID, xml-lang, source, sdatrefs, methrefs, pubrefs, URI)
+|     |     |
+|     |     |---- 4.4.12 dmns*       (ATT == ID, xml-lang, source, rank, varRef)
+|     |     |     |
+|     |     |     +---- 4.4.12.1 cohort*   (ATT == ID, xml-lang, source, catRef, value)
+|     |     |           |
+|     |     |           +---- 4.4.12.1.1 range* (ATT == ID, xml-lang, source, UNITS, min, minExclusive
+|     |     |                                           max, maxExclusive)
+|     |     |
+|     |     |---- 4.4.13 measure*     (ATT == ID, xml-lang, source, varRef, aggrMeth, measUnit, scale,
+|     |     |                                origin, additivity)
+|     |     +---- 4.4.14 notes*      (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|     |
+|     +---- 4.5 notes*      (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)
+|
++---- 5.0 otherMat* (ATT == ID, xml-lang, source, type, level, URI)<---------------------------+
+      |                                                                                        |
+      |---- 5.1 labl* (ATT == ID, xml-lang, source, level, vendor, country, sdatrefs)          |
+      |---- 5.2 txt?(ATT == ID, xml-lang, source, level, sdatrefs)                             |
+      |---- 5.3 notes* (ATT == ID, xml-lang, source, type, subject, level, resp, sdatrefs)     |
+      |---- 5.4 table* (ATT == ID, xml-lang, source)                                           |
+      |---- 5.5 citation? (ATT == ID, xml-lang, source, MARCURI)                               |
+      |           NOTE: full tree for citation element omitted for reasons of space.           |
+      +---- 5.6 otherMat* (ATT == ID, xml-lang, source, type, level, URI) ---------------------+
+                  NOTE: otherMat is recursively defined to 5.0.

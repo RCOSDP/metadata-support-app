@@ -1,0 +1,42 @@
+{
+  "name": "PDF → メタデータ変換アプリ",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+
+  "workspaceFolder": "/workspaces/nii-metadata-support",
+
+  "remoteUser": "vscode",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+
+  "mounts": [
+    "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached"
+  ],
+
+  "containerEnv": {
+    "PYTHONPATH": "/workspaces/nii-metadata-support:/workspaces/nii-metadata-support/metadata_support/src",
+    "AWS_PROFILE": "NII"
+  },
+
+  "postCreateCommand": "cd /workspaces/nii-metadata-support && uv sync",
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/nii-metadata-support/.venv/bin/python",
+        "python.terminal.activateEnvironment": true
+      },
+      "extensions": [
+        "ms-python.python",
+        "mhutchie.git-graph",
+        "GitHub.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml"
+      ]
+    }
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "タイトル": {
+    "no": 1,
+    "ddi_path": "stdyDscr->citation->titlStmt->titl",
+    "leaf": "titl",
+    "current_desc": "調査名",
+    "en_title": "Title",
+    "en_description": "Full authoritative title for the work at the appropriate level: marked-up document; marked-up document source; study; other material(s) related to study description; other material(s) related to study. The study title will in most cases be identical to the title for the marked-up document. A full title should indicate the geographic scope of the data collection as well as the time period covered. Title of data collection (codeBook/stdyDscr/citation/titlStmt/titl) maps to Dublin Core Title element. This element is required in the Study Description citation."
+  },
+  "その他のタイトル": {
+    "no": 2,
+    "ddi_path": "stdyDscr->citation->titlStmt->altTitl",
+    "leaf": "altTitl",
+    "current_desc": "タイトルの別名・副題・英訳タイトルなど",
+    "en_title": "Alternative Title",
+    "en_description": "A title by which the work is commonly referred, or an abbreviation of the title."
+  },
+  "作成者": {
+    "no": 3,
+    "ddi_path": "stdyDscr->citation->rspStmt->AuthEnty",
+    "leaf": "AuthEnty",
+    "current_desc": "調査主体/調査代表者/作成者/著者",
+    "en_title": "Authoring Entity/Primary Investigator",
+    "en_description": "The person, corporate body, or agency responsible for the work's substantive and intellectual content. Repeat the element for each author, and use \"affiliation\" attribute if available. Invert first and last name and use commas. Author of data collection (codeBook/stdyDscr/citation/rspStmt/AuthEnty) maps to Dublin Core Creator element. Inclusion of this element in codebook is recommended. The \"author\" in the Document Description should be the individual(s) or organization(s) directly responsible for the intellectual content of the DDI version, as distinct from the person(s) or organization(s) responsible for the intellectual content of the earlier paper or electronic edition from which the DDI edition may have been derived."
+  },
+  "研究助成機関": {
+    "no": 4,
+    "ddi_path": "stdyDscr->citation->prodStmt->fundAg",
+    "leaf": "fundAg",
+    "current_desc": "調査研究に対して資金を提供した機関",
+    "en_title": "Funding Agency/Sponsor",
+    "en_description": "The source(s) of funds for production of the work. If different funding agencies sponsored different stages of the production process, use the \"role\" attribute to distinguish them."
+  },
+  "研究費番号": {
+    "no": 5,
+    "ddi_path": "stdyDscr->citation->prodStmt->grantNo",
+    "leaf": "grantNo",
+    "current_desc": "助成金・研究費の識別番号",
+    "en_title": "Grant Number",
+    "en_description": "The grant/contract number of the project that sponsored the effort. If more than one, indicate the appropriate agency using the \"agency\" attribute. If different funding agencies sponsored different stages of the production process, use the \"role\" attribute to distinguish the grant numbers."
+  },
+  "整理番号": {
+    "no": 6,
+    "ddi_path": "stdyDscr->citation->titlStmt->IDNo",
+    "leaf": "IDNo",
+    "current_desc": "論文や調査票に付与された一意の識別番号",
+    "en_title": "Identification Number",
+    "en_description": "Unique string or number (producer's or archive's number). An \"agency\" attribute is supplied. Identification Number of data collection maps to Dublin Core Identifier element."
+  },
+  "編集者": {
+    "no": 7,
+    "ddi_path": "stdyDscr->citation->prodStmt->producer",
+    "leaf": "producer",
+    "current_desc": "調査したデータの加工・編集に責任を持つ組織",
+    "en_title": "Producer",
+    "en_description": "The producer is the person or organization with the financial or administrative responsibility for the physical processes whereby the document was brought into existence. Use the \"role\" attribute to distinguish different stages of involvement in the production process, such as original producer. Producer of data collection (codeBook/stdyDscr/citation/prodStmt/producer) maps to Dublin Core Publisher element. The \"producer\" in the Document Description should be the agency or person that prepared the marked-up document."
+  },
+  "配布者": {
+    "no": 8,
+    "ddi_path": "stdyDscr->citation->distStmt->distrbtr",
+    "leaf": "distrbtr",
+    "current_desc": "調査したデータの配布・提供を行う組織",
+    "en_title": "Distributor",
+    "en_description": "The organization designated by the author or producer to generate copies of the particular work including any necessary editions or revisions. Names and addresses may be specified and other archives may be co-distributors. A URI attribute is included to provide an URN or URL to the ordering service or download facility on a Web site."
+  },
+  "寄託者": {
+    "no": 9,
+    "ddi_path": "stdyDscr->citation->distStmt->depositr",
+    "leaf": "depositr",
+    "current_desc": "調査したデータをアーカイブに寄託した組織または個人",
+    "en_title": "Depositor",
+    "en_description": "The name of the person (or institution) who provided this work to the archive storing it."
+  },
+  "権利情報": {
+    "no": 10,
+    "ddi_path": "stdyDscr->citation->prodStmt->copyright",
+    "leaf": "copyright",
+    "current_desc": "調査したデータのライセンス",
+    "en_title": "Copyright",
+    "en_description": "Copyright statement for the work at the appropriate level. Copyright for data collection (codeBook/stdyDscr/citation/prodStmt/copyright) maps to Dublin Core Rights. Inclusion of this element is recommended."
+  },
+  "バージョン情報": {
+    "no": 11,
+    "ddi_path": "stdyDscr->citation->verStmt->version",
+    "leaf": "version",
+    "current_desc": "調査したデータセットの版番号・改訂履歴",
+    "en_title": "Version",
+    "en_description": "Also known as release or edition. If there have been substantive changes in the data/documentation since their creation, this statement should be used at the appropriate level. The ISO standard for dates (YYYY-MM-DD) is recommended for use with the \"date\" attribute."
+  },
+  "引用上の注意": {
+    "no": 12,
+    "ddi_path": "stdyDscr->citation->biblCit",
+    "leaf": "biblCit",
+    "current_desc": "入力した論文や調査票を引用する際の注意点",
+    "en_title": "Bibliographic Citation",
+    "en_description": "Complete bibliographic reference containing all of the standard elements of a citation that can be used to cite the work. The \"format\" attribute is provided to enable specification of the particular citation style used, e.g., APA, MLA, Chicago, etc."
+  },
+  "URI": {
+    "no": 13,
+    "ddi_path": "holdings",
+    "leaf": "holdings",
+    "current_desc": "ランディングページURI",
+    "en_title": "Holdings Information",
+    "en_description": "Information concerning either the physical or electronic holdings of the cited work. Attributes include: location--The physical location where a copy is held; callno--The call number for a work at the location specified; and URI--A URN or URL for accessing the electronic copy of the cited work."
+  },
+  "トピック": {
+    "no": 14,
+    "ddi_path": "stdyDscr->stdyInfo->subject->topcClas",
+    "leaf": "topcClas",
+    "current_desc": "調査したプロジェクトや調査内容のトピック",
+    "en_title": "Topic Classification",
+    "en_description": "The classification field indicates the broad substantive topic(s) that the data cover. Library of Congress subject terms may be used here. The \"vocab\" attribute is provided for specification of the controlled vocabulary in use, e.g., LCSH, MeSH, etc. The \"vocabURI\" attribute specifies the location for the full controlled vocabulary. Maps to Dublin Core Subject element. Inclusion of this element in the codebook is recommended."
+  },
+  "概要": {
+    "no": 15,
+    "ddi_path": "stdyDscr->stdyInfo->abstract",
+    "leaf": "abstract",
+    "current_desc": "調査概要/資料概要",
+    "en_title": "Abstract",
+    "en_description": "An unformatted summary describing the purpose, nature, and scope of the data collection, special characteristics of its contents, major subject areas covered, and what questions the PIs attempted to answer when they conducted the study. A listing of major variables in the study is important here. In cases where a codebook contains more than one abstract (for example, one might be supplied by the data producer and another prepared by the data archive where the data are deposited), the \"source\" and \"date\" attributes may be used to distinguish the abstract versions. Maps to Dublin Core Description element. Inclusion of this element in the codebook is recommended. The \"date\" attribute should follow ISO convention of YYYY-MM-DD. The contentType attribute provides forward-compatibility with DDI 3 by describing where the content fits in that structure, or if is mixed in terms of what is contained."
+  },
+  "対象時期": {
+    "no": 16,
+    "ddi_path": "stdyDscr->stdyInfo->sumDscr->timePrd",
+    "leaf": "timePrd",
+    "current_desc": "調査を開始した日付と終了した日付",
+    "en_title": "Time Period Covered",
+    "en_description": "The time period to which the data refer. This item reflects the time period covered by the data, not the dates of coding or making documents machine-readable or the dates the data were collected. Also known as span. Use the event attribute to specify \"start\", \"end\", or \"single\" for each date entered. The ISO standard for dates (YYYY-MM-DD) is recommended for use with the \"date\" attribute. The \"cycle\" attribute permits specification of the relevant cycle, wave, or round of data. Maps to Dublin Core Coverage element. Inclusion of this element is recommended."
+  },
+  "調査日": {
+    "no": 17,
+    "ddi_path": "stdyDscr->stdyInfo->sumDscr->collDate",
+    "leaf": "collDate",
+    "current_desc": "調査を開始した日付と終了した日付",
+    "en_title": "Date of Collection",
+    "en_description": "Contains the date(s) when the data were collected. Use the event attribute to specify \"start\", \"end\", or \"single\" for each date entered. The ISO standard for dates (YYYY-MM-DD) is recommended for use with the \"date\" attribute. The \"cycle\" attribute permits specification of the relevant cycle, wave, or round of data. Maps to Dublin Core Coverage element. Inclusion of this element in the codebook is recommended."
+  },
+  "対象地域": {
+    "no": 18,
+    "ddi_path": "stdyDscr->stdyInfo->sumDscr->geogCover",
+    "leaf": "geogCover",
+    "current_desc": "調査地域（都道府県全ての場合は日本（全国）とする）",
+    "en_title": "Geographic Coverage",
+    "en_description": "Information on the geographic coverage of the data. Includes the total geographic scope of the data, and any additional levels of geographic coding provided in the variables. Maps to Dublin Core Coverage element. Inclusion of this element in the codebook is recommended. Fpor forward-compatibility, DDI 3 XHTML tags may be used in this element."
+  },
+  "観察単位": {
+    "no": 19,
+    "ddi_path": "stdyDscr->stdyInfo->sumDscr->anlyUnit",
+    "leaf": "anlyUnit",
+    "current_desc": "個人、世帯、企業、イベント、地域などの単位",
+    "en_title": "Unit of Analysis",
+    "en_description": "Basic unit of analysis or observation that the file describes: individuals, families/households, groups, institutions/organizations, administrative units, etc. The \"unit\" attribute is included to permit the development of a controlled vocabulary for this element."
+  },
+  "母集団": {
+    "no": 20,
+    "ddi_path": "stdyDscr->stdyInfo->sumDscr->universe",
+    "leaf": "universe",
+    "current_desc": "調査の対象となる集団全体の定義",
+    "en_title": "Universe",
+    "en_description": "The group of persons or other elements that are the object of research and to which any analytic results refer. Age,nationality, and residence commonly help to delineate a given universe, but any of a number of factors may be involved, such as sex, race, income, veteran status, criminal convictions, etc. The universe may consist of elements other than persons, such as housing units, court cases, deaths, countries, etc. In general, it should be possible to tell from the description of the universe whether a given individual or element (hypothetical or real) is a member of the population under study. A \"level\" attribute is included to permit coding of the level to which universe applies, i.e., the study level, the file level (if different from study), the record group, the variable group, the nCube group, the variable, or the nCube level. The \"clusion\" attribute provides for specification of groups included (I) in or excluded (E) from the universe. If all the variables/nCubes described in the data documentation relate to the same population, e.g., the same set of survey respondents, this element would be unnecessary at data description level. In this case, universe can be fully described at the study level. For forward-compatibility, DDI 3 XHTML tags may be used in this element. This element may be repeated only to support multiple language expressions of the content."
+  },
+  "データタイプ": {
+    "no": 21,
+    "ddi_path": "stdyDscr->stdyInfo->sumDscr->dataKind",
+    "leaf": "dataKind",
+    "current_desc": "調査で収集されたデータの種類・形式",
+    "en_title": "Kind of Data",
+    "en_description": "The type of data included in the file: survey data, census/enumeration data, aggregate data, clinical data, event/transaction data, program source code, machine-readable text, administrative records data, experimental data, psychological test, textual data, coded textual, coded documents, time budget diaries, observation data/ratings, process-produced data, etc. This element maps to Dublin Core Type element. The type attribute can be used for forward-compatibility with DDI 3, by providing a type for use of controlled vocabulary, as this is descriptive in DDI 2 and CodeValue in DDI 3."
+  },
+  "時間的設計": {
+    "no": 22,
+    "ddi_path": "stdyDscr->method->dataColl->timeMeth",
+    "leaf": "timeMeth",
+    "current_desc": "縦断か横断かなどの時間的な調査設計",
+    "en_title": "Time Method",
+    "en_description": "The time method or time dimension of the data collection. The \"method\" attribute is included to permit the development of a controlled vocabulary for this element. For forward-compatibility, DDI 3 XHTML tags may be used in this element."
+  },
+  "データ収集者": {
+    "no": 23,
+    "ddi_path": "stdyDscr->method->dataColl->dataCollector",
+    "leaf": "dataCollector",
+    "current_desc": "実際のデータ収集作業を担当した組織",
+    "en_title": "Data Collector",
+    "en_description": "The entity (individual, agency, or institution) responsible for administering the questionnaire or interview or compiling the data. This refers to the entity collecting the data, not to the entity producing the documentation. Attribute \"abbr\" may be used to list common abbreviations given to agencies, etc. Attribute \"affiliation\" may be used to record affiliation of the data collector. The role attribute specifies the role of person in the data collection process."
+  },
+  "サンプリング方法": {
+    "no": 24,
+    "ddi_path": "stdyDscr->method->dataColl->sampProc",
+    "leaf": "sampProc",
+    "current_desc": "データのサンプリング方法",
+    "en_title": "Sampling Procedure",
+    "en_description": "The type of sample and sample design used to select the survey respondents to represent the population. May include reference to the target sample size and the sampling fraction."
+  },
+  "調査方法": {
+    "no": 25,
+    "ddi_path": "stdyDscr->method->dataColl->collMode",
+    "leaf": "collMode",
+    "current_desc": "データ収集の方法・モード",
+    "en_title": "Mode of Data Collection",
+    "en_description": "The method used to collect the data; instrumentation characteristics. XHTML formatting may be used in the txt element for forward-compatibility with DDI 3."
+  },
+  "調査機器": {
+    "no": 26,
+    "ddi_path": "stdyDscr->method->dataColl->resInstru",
+    "leaf": "resInstru",
+    "current_desc": "回答を収集する機器、媒体",
+    "en_title": "Type of Research Instrument",
+    "en_description": "The type of data collection instrument used. \"Structured\" indicates an instrument in which all respondents are asked the same questions/tests, possibly with precoded answers. If a small portion of such a questionnaire includes open-ended questions, provide appropriate comments. \"Semi-structured\" indicates that the research instrument contains mainly open-ended questions. \"Unstructured\" indicates that in-depth interviews were conducted. The \"type\" attribute is included to permit the development of a controlled vocabulary for this element."
+  },
+  "ウェイト": {
+    "no": 27,
+    "ddi_path": "stdyDscr->method->dataColl->weight",
+    "leaf": "weight",
+    "current_desc": "標本の代表性を補正するための重み付け情報",
+    "en_title": "Weighting",
+    "en_description": "The use of sampling procedures may make it necessary to apply weights to produce accurate statistical results. Describe here the criteria for using weights in analysis of a collection. If a weighting formula or coefficient was developed, provide this formula, define its elements, and indicate how the formula is applied to data."
+  },
+  "クリーニング処理": {
+    "no": 28,
+    "ddi_path": "stdyDscr->method->dataColl->cleanOps",
+    "leaf": "cleanOps",
+    "current_desc": "データの加工処理内容",
+    "en_title": "Cleaning Operations",
+    "en_description": "Methods used to \"clean\" the data collection, e.g., consistency checking, wild code checking, etc. The \"agency\" attribute permits specification of the agency doing the data cleaning."
+  },
+  "回収率": {
+    "no": 29,
+    "ddi_path": "stdyDscr->method->anlyInfo->respRate",
+    "leaf": "respRate",
+    "current_desc": "配布数に対する有効回収数の割合",
+    "en_title": "Response Rate",
+    "en_description": "The percentage of sample members who provided information. This may include a broader description of stratified response rates, information affecting resonse rates etc."
+  },
+  "アクセス権": {
+    "no": 30,
+    "ddi_path": "stdyDscr->dataAccs->setAvail->avlStatus",
+    "leaf": "avlStatus",
+    "current_desc": "データのアクセス権の状態",
+    "en_title": "Availability Status",
+    "en_description": "Statement of collection availability. An archive may need to indicate that a collection is unavailable because it is embargoed for a period of time, because it has been superseded, because a new edition is imminent, etc. It is anticipated that a controlled vocabulary will be developed for this element."
+  },
+  "データファイルURI": {
+    "no": 31,
+    "ddi_path": "stdyDscr->dataAccs->setAvail->accsPlac",
+    "leaf": "accsPlac",
+    "current_desc": "データファイルの取得先を示すURL",
+    "en_title": "Location of Data Collection",
+    "en_description": "Location where the data collection is currently stored. Use the URI attribute to provide a URN or URL for the storage site or the actual address from which the data may be downloaded."
+  },
+  "利用条件": {
+    "no": 32,
+    "ddi_path": "stdyDscr->dataAccs->useStmt->conditions",
+    "leaf": "conditions",
+    "current_desc": "データを利用する際に遵守すべき条件・規約",
+    "en_title": "Conditions",
+    "en_description": "Indicates any additional information that will assist the user in understanding the access and use conditions of the data collection."
+  },
+  "関連情報": {
+    "no": 33,
+    "ddi_path": "stdyDscr->othrStdyMat->relMat",
+    "leaf": "relMat",
+    "current_desc": "当該調査研究に関連する補足資料・データセット",
+    "en_title": "Related Materials",
+    "en_description": "Describes materials related to the study description, such as appendices, additional information on sampling found in other documents, etc. Can take the form of bibliographic citations. This element can contain either PCDATA or a citation or both, and there can be multiple occurrences of both the citation and PCDATA within a single element. May consist of a single URI or a series of URIs comprising a series of citations/references to external materials which can be objects as a whole (journal articles) or parts of objects (chapters or appendices in articles or documents)."
+  },
+  "関連文献": {
+    "no": 34,
+    "ddi_path": "stdyDscr->othrStdyMat->relPubl",
+    "leaf": "relPubl",
+    "current_desc": "当該調査研究に関連する公刊物・論文",
+    "en_title": "Related Publications",
+    "en_description": "Bibliographic and access information aboutvarticles and reports based on the data in this collection. Can take the formbof bibliographic citations."
+  }
+}

@@ -1,0 +1,21 @@
+[project]
+name = "nii-metadata-support"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "streamlit",
+    "boto3",
+    "litellm>=1.82.0",
+    "llm>=0.29",
+    "pymupdf>=1.27.1",
+    "pytesseract>=0.3.10",
+    "rank_bm25>=0.2.2",
+    "linkml-runtime>=1.6.3,<1.10.0",
+    "tiktoken>=0.7.0",
+    "pydantic",
+    "pyyaml",
+    "numpy",
+    "inflection>=0.5.1",
+    "importlib-metadata>=8.7.1",
+    "httpx>=0.24.1",
+]
