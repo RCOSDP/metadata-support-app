@@ -1,0 +1,96 @@
+ja,en,notation,note
+人口,"DEMOGRAPHY (POPULATION, VITAL STATISTICS, AND CENSUSES)",Demography,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+人口センサス,Censuses,Demography.Censuses,
+人口移動,Migration,Demography.Migration,
+罹病と死亡,Morbidity and mortality,Demography.MorbidityAndMortality,
+経済,ECONOMICS,Economics,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+消費と消費者行動,Consumption and consumer behaviour,Economics.ConsumptionAndConsumerBehaviour,
+経済状況と経済指標,Economic conditions and indicators,Economics.EconomicConditionsAndIndicators,
+経済政策、歳出と歳入,"Economic policy,  public expenditure and revenue",Economics.EconomicPolicyPublicExpenditureAndRevenue,CESSDA公式の英語ラベルに連続空白あり(原文のまま)
+経済体制と経済発展,Economic systems and development,Economics.EconomicSystemsAndDevelopment,
+所得、財産、投資・貯蓄,"Income, property and investment/saving",Economics.IncomePropertyAndInvestmentSaving,
+教育,EDUCATION,Education,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+義務教育と就学前教育,Compulsory and pre-school education,Education.CompulsoryAndPreschoolEducation,
+教育政策,Educational policy,Education.EducationalPolicy,
+高等教育,Higher and further education,Education.HigherAndFurtherEducation,
+生涯・継続教育,Life-long/continuing education,Education.LifelongContinuingEducation,
+職業教育と職業訓練,Vocational education and training,Education.VocationalEducationAndTraining,
+健康,HEALTH,Health,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+食事と栄養,Diet and nutrition,Health.DietAndNutrition,
+薬物乱用、アルコール、喫煙,"Drug abuse, alcohol and smoking",Health.DrugAbuseAlcoholAndSmoking,
+健康一般とウェルビーイング,General health and well-being,Health.GeneralHealthAndWellbeing,
+ヘルスケアサービスと政策,Health care services and policies,Health.HealthCareServicesAndPolicies,
+薬と治療,Medication and treatment,Health.MedicationAndTreatment,
+労働衛生,Occupational health,Health.OccupationalHealth,
+フィットネスと運動,Physical fitness and exercise,Health.PhysicalFitnessAndExercise,
+公衆衛生,Public health,Health.PublicHealth,
+リプロダクティブヘルス,Reproductive health,Health.ReproductiveHealth,
+徴候と症状、病気の状態,Signs and symptoms; pathological conditions,Health.SignsAndSymptomsPathologicalConditions,
+疾病、障害、健康状態,"Specific diseases, disorders and medical conditions",Health.SpecificDiseasesDisordersAndMedicalConditions,
+創傷と損傷,Wounds and injuries,Health.WoundsAndInjuries,
+歴史,HISTORY,History,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+住宅と土地利用,HOUSING AND LAND USE,HousingAndLandUse,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+住宅,Housing,HousingAndLandUse.Housing,
+土地利用と計画,Land use and planning,HousingAndLandUse.LandUseAndPlanning,
+労働と雇用,LABOUR AND EMPLOYMENT,LabourAndEmployment,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+職員研修,Employee training,LabourAndEmployment.EmployeeTraining,
+雇用,Employment,LabourAndEmployment.Employment,
+労働と雇用政策,Labour and employment policy,LabourAndEmployment.LabourAndEmploymentPolicy,
+労使関係・争議,Labour relations/conflict,LabourAndEmployment.LabourRelationsConflict,
+退職,Retirement,LabourAndEmployment.Retirement,
+失業,Unemployment,LabourAndEmployment.Unemployment,
+労働条件,Working conditions,LabourAndEmployment.WorkingConditions,
+法、犯罪、法制度,"LAW, CRIME AND LEGAL SYSTEMS",LawCrimeAndLegalSystems,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+犯罪と法の執行,Crime and law enforcement,LawCrimeAndLegalSystems.CrimeAndLawEnforcement,
+立法と法制度,Legislation and legal systems,LawCrimeAndLegalSystems.LegislationAndLegalSystems,
+メディア、コミュニケーション、言語,"MEDIA, COMMUNICATION AND LANGUAGE",MediaCommunicationAndLanguage,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+情報社会,Information society,MediaCommunicationAndLanguage.InformationSociety,
+言語と言語学,Language and linguistics,MediaCommunicationAndLanguage.LanguageAndLinguistics,
+メディア,Media,MediaCommunicationAndLanguage.Media,
+広報（PR),Public relations,MediaCommunicationAndLanguage.PublicRelations,
+自然環境,NATURAL ENVIRONMENT,NaturalEnvironment,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+エネルギーと天然資源,Energy and natural resources,NaturalEnvironment.EnergyAndNaturalResources,
+環境と保全,Environment and conservation,NaturalEnvironment.EnvironmentAndConservation,
+自然景観,Natural landscapes,NaturalEnvironment.NaturalLandscapes,
+植物と動物,Plants and animals,NaturalEnvironment.PlantsAndAnimals,
+政治,POLITICS,Politics,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+紛争、安全保障、平和,"Conflict, security and peace",Politics.ConflictSecurityAndPeace,
+選挙,Elections,Politics.Elections,
+政府、政治制度、組織,"Government, political systems and organisations",Politics.GovernmentPoliticalSystemsAndOrganisations,
+国際政治と国際機構,International politics and organisations,Politics.InternationalPoliticsAndOrganisations,
+政治行動と政治的態度,Political behaviour and attitudes,Politics.PoliticalBehaviourAndAttitudes,
+政治的イデオロギー,Political ideology,Politics.PoliticalIdeology,
+心理,PSYCHOLOGY,Psychology,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+科学と技術,SCIENCE AND TECHNOLOGY,ScienceAndTechnology,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+バイオテクノロジー,Biotechnology,ScienceAndTechnology.Biotechnology,
+情報技術,Information technology,ScienceAndTechnology.InformationTechnology,
+社会階層と社会集団,SOCIAL STRATIFICATION AND GROUPINGS,SocialStratificationAndGroupings,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+子ども,Children,SocialStratificationAndGroupings.Children,
+高齢者,Elderly,SocialStratificationAndGroupings.Elderly,
+エリートとリーダーシップ,Elites and leadership,SocialStratificationAndGroupings.ElitesAndLeadership,
+平等、不平等、社会的排除,"Equality, inequality and social exclusion",SocialStratificationAndGroupings.EqualityInequalityAndSocialExclusion,
+家族生活と結婚,Family life and marriage,SocialStratificationAndGroupings.FamilyLifeAndMarriage,
+ジェンダーと性別役割,Gender and gender roles,SocialStratificationAndGroupings.GenderAndGenderRoles,
+マイノリティー,Minorities,SocialStratificationAndGroupings.Minorities,
+社会移動と職業移動,Social and occupational mobility,SocialStratificationAndGroupings.SocialAndOccupationalMobility,
+若者,Youth,SocialStratificationAndGroupings.Youth,
+社会福祉政策と制度,SOCIAL WELFARE POLICY AND SYSTEMS,SocialWelfarePolicyAndSystems,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+社会福祉制度・構造,Social welfare systems/structures,SocialWelfarePolicyAndSystems.SocialWelfareSystemsStructures,
+特定の社会サービスの利用と供給,Specific social services: use and availability,SocialWelfarePolicyAndSystems.SpecificSocialServicesUseAndAvailability,
+社会と文化,SOCIETY AND CULTURE,SocietyAndCulture,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+地域社会、都市生活、農村生活,"Community, urban and rural life",SocietyAndCulture.CommunityUrbanAndRuralLife,
+文化的活動と参加,Cultural activities and participation,SocietyAndCulture.CulturalActivitiesAndParticipation,
+文化的アイデンティティーとナショナルアイデンティティー,Cultural and national identity,SocietyAndCulture.CulturalAndNationalIdentity,
+余暇、観光、スポーツ,"Leisure, tourism and sport",SocietyAndCulture.LeisureTourismAndSport,
+宗教と価値観,Religion and values,SocietyAndCulture.ReligionAndValues,
+社会行動と社会的態度,Social behaviour and attitudes,SocietyAndCulture.SocialBehaviourAndAttitudes,
+社会変動,Social change,SocietyAndCulture.SocialChange,
+社会状況と社会指標,Social conditions and indicators,SocietyAndCulture.SocialConditionsAndIndicators,
+生活時間,Time use,SocietyAndCulture.TimeUse,
+貿易、産業、市場,"TRADE, INDUSTRY AND MARKETS",TradeIndustryAndMarkets,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+農林水産業,Agriculture and rural industry,TradeIndustryAndMarkets.AgricultureAndRuralIndustry,
+ビジネス・産業経営と組織,Business/industrial management and organisation,TradeIndustryAndMarkets.BusinessIndustrialManagementAndOrganisation,
+外国貿易,Foreign trade,TradeIndustryAndMarkets.ForeignTrade,
+運輸と旅行,TRANSPORT AND TRAVEL,TransportAndTravel,上位カテゴリ(CESSDA公式の英語ラベルは大文字表記)
+その他,OTHER,Other,CESSDA語彙のOTHER(その他)に対応
+社会福祉政策,Social welfare policy,SocialWelfarePolicyAndSystems.SocialWelfarePolicy,configの統制語彙リストに未収録だがCESSDA語彙に存在するため追加

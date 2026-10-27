@@ -37,6 +37,14 @@ from metadata_support.app.custom.text_extractor import PDFTextExtractor
 from metadata_support.app.custom.chunk_pipeline import ChunkPipeline
 from metadata_support.app.custom.output import OutputWriter
 from metadata_support.app.custom.llm import LLMProcessor
+from metadata_support.app.custom.validator import MAX_TOTAL_UPLOAD_MB, UploadValidator
+from metadata_support.app.custom.evidence import (
+    EvidenceBuilder,
+    LocalEvidenceStore,
+    chunk_refs_from_df,
+    evidence_to_html,
+    find_field_evidence,
+)
 from metadata_support.wrappers.literature.jdcat_search import (
     hits_to_ddi_records,
     search_jdcat_all_pages,
@@ -133,14 +141,46 @@ st.markdown("""
     .status-done { background: #ffffff; border: 1px solid #333333; border-radius: 5px; padding: 10px 15px; text-align: center; font-weight: bold; color: #333333; margin: 10px 0; }
     div[data-testid="stButton"] > button[kind="primary"] { background-color: #2e7d32; border-color: #2e7d32; color: #ffffff; }
     div[data-testid="stButton"] > button[kind="primary"]:hover { background-color: #1b5e20; border-color: #1b5e20; }
+    div[data-testid="stButton"] > button[kind="primary"]:disabled { background-color: #bdbdbd; border-color: #bdbdbd; color: #ffffff; cursor: not-allowed; }
+    /* 処理中に表示する「処理を停止する」ボタン（key="stop_button" に付く .st-key-stop_button で指定） */
+    .st-key-stop_button button { background-color: #c62828; border-color: #c62828; color: #ffffff; }
+    .st-key-stop_button button:hover { background-color: #8e0000; border-color: #8e0000; color: #ffffff; }
     div[data-testid="stDownloadButton"] > button { background-color: #1565c0; border-color: #1565c0; color: #ffffff; }
     div[data-testid="stDownloadButton"] > button:hover { background-color: #0d47a1; border-color: #0d47a1; }
+    /* 画面幅が狭くラベルが折り返したとき、同じ行のダウンロードボタンの高さを揃える */
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stDownloadButton"]) { align-items: stretch; }
+    div[data-testid="stColumn"]:has(div[data-testid="stDownloadButton"]) > div,
+    div[data-testid="stColumn"]:has(div[data-testid="stDownloadButton"]) div[data-testid="stElementContainer"]:has(div[data-testid="stDownloadButton"]),
+    div[data-testid="stDownloadButton"] { height: 100%; flex: 1 1 auto; }
+    div[data-testid="stDownloadButton"] > button { height: 100%; }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-title">Social Science Metadata Generator</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">社会科学メタデータ生成</div>', unsafe_allow_html=True)
 
-uploaded_files = st.file_uploader("PDFファイルをアップロード", type=["pdf"], accept_multiple_files=True)
+# st.file_uploader に Streamlit が出す英語表記（案内文・ボタン・サイズ超過エラー）を CSS で日本語に置き換える。
+# 元の文字を font-size: 0 で隠し、::after で日本語を表示する。Streamlit 内部の DOM 構造（1.55.0 で確認）に
+# 依存するため、Streamlit の更新時は表示を確認すること。
+# エラー欄はサイズ超過のほかアップロード失敗時にも使われるため、どちらにも当てはまる文言にしている。
+st.markdown(f"""
+<style>
+    [data-testid="stFileUploaderDropzoneInstructions"] > div > span {{ font-size: 0; }}
+    [data-testid="stFileUploaderDropzoneInstructions"] > div > span:first-child::after {{ content: "ここにファイルをドラッグ＆ドロップ"; font-size: 1rem; }}
+    [data-testid="stFileUploaderDropzoneInstructions"] > div > span:last-child::after {{ content: "PDFファイル・合計{MAX_TOTAL_UPLOAD_MB}MBまで"; font-size: 0.875rem; }}
+    [data-testid="stFileUploaderDropzone"] button {{ font-size: 0; }}
+    [data-testid="stFileUploaderDropzone"] button::after {{ content: "ファイルを選択"; font-size: 1rem; }}
+    [data-testid="stFileUploaderFileErrorMessage"] {{ font-size: 0; }}
+    [data-testid="stFileUploaderFileErrorMessage"]::after {{ content: "アップロードできません。ファイルサイズの上限は{MAX_TOTAL_UPLOAD_MB}MBです。"; font-size: 0.875rem; }}
+</style>
+""", unsafe_allow_html=True)
+
+# type=["pdf"] を指定すると PDF 以外のファイルはフロントエンドで除外されて uploaded_files に
+# 含まれず、PDF と混在させてもボタンが押せてしまう。形式チェックは UploadValidator で行う。
+uploaded_files = st.file_uploader(
+    "PDFファイルをアップロード",
+    accept_multiple_files=True,
+    help=f"複数ファイルの合計サイズは{MAX_TOTAL_UPLOAD_MB}MBまでです。",
+)
 
 # =========================
 # サイドバー
@@ -169,6 +209,14 @@ with st.sidebar:
 # =========================
 # メイン処理
 # =========================
+def _request_run():
+    st.session_state.run_requested = True
+
+
+def _request_stop():
+    st.session_state.stop_requested = True
+
+
 if uploaded_files:
 
     model_config = MODELS[selected_model]
@@ -178,14 +226,48 @@ if uploaded_files:
     )
     llm_processor.extractor = extractor
 
-    run_button = st.button("メタデータ生成開始", type="primary", use_container_width=True)
+    # 入力バリデーション（1件でもエラーがあれば生成を実行させない）
+    validation_errors = UploadValidator(uploaded_files).validate()
+    if validation_errors:
+        st.error("\n".join(f"- {e}" for e in validation_errors))
+
+    # 処理中は「メタデータ生成開始」ボタンを「処理を停止する」ボタンに差し替え、二重実行を防ぐ。
+    # 「処理を停止する」ボタンを押すと Streamlit の再実行要求により実行中の処理が中断される。
+    # 中断が反映されるのは次に st.* の描画を行った時点のため、処理の区切りごとに
+    # _show_processing() を呼んで中断ポイントにしている（実行中の LLM 呼び出しは完了を待つ）。
+    is_running = st.session_state.pop("run_requested", False)
+    button_placeholder = st.empty()
+    if is_running:
+        button_placeholder.button(
+            "処理を停止する",
+            use_container_width=True,
+            on_click=_request_stop,
+            key="stop_button",
+        )
+    else:
+        button_placeholder.button(
+            "メタデータ生成開始",
+            type="primary",
+            use_container_width=True,
+            disabled=bool(validation_errors),
+            on_click=_request_run,
+            key="run_button",
+        )
+    if st.session_state.pop("stop_requested", False):
+        st.info("処理を停止しました。")
 
     if "all_results" not in st.session_state:
         st.session_state.all_results = {}
+    if "all_evidence" not in st.session_state:
+        st.session_state.all_evidence = {}
 
-    if run_button:
+    if is_running:
         status_placeholder = st.empty()
-        status_placeholder.markdown('<div class="status-processing">処理中</div>', unsafe_allow_html=True)
+
+        def _show_processing():
+            status_placeholder.markdown('<div class="status-processing">処理中</div>', unsafe_allow_html=True)
+
+        _show_processing()
 
         start_time = time.time()
         llm_processor.start_time = start_time
@@ -194,7 +276,10 @@ if uploaded_files:
         # =======================
         # テキスト抽出
         # =======================
-        all_pdf_bytes, all_full_texts, combined_text = PDFTextExtractor(uploaded_files).extract()
+        text_extractor = PDFTextExtractor(uploaded_files)
+        all_pdf_bytes, all_full_texts, combined_text = text_extractor.extract()
+
+        _show_processing()
 
         # ===========================================
         # チャンク分割 + フィールド判定（ChunkPipeline で一括実行）
@@ -206,18 +291,22 @@ if uploaded_files:
             batch_size=50,
             max_workers=20,
             excluded_group_names={"外部情報"},
+            all_page_texts=text_extractor.all_page_texts,
         ).run()
         split_chunks_map = _pipeline_result["split_chunks_map"]
         split_text_logs = _pipeline_result["split_text_logs"]
         split_to_file = _pipeline_result["split_to_file"]
         split_position_info = _pipeline_result["split_position_info"]
         file_ordered_chunks = _pipeline_result["file_ordered_chunks"]
+        file_chunk_pages = _pipeline_result["file_chunk_pages"]  # 根拠情報のページ番号
         file_list = _pipeline_result["file_list"]
         NUM_SPLITS = _pipeline_result["num_splits"]
         total_chunks_step1 = _pipeline_result["total_chunks"]
         all_chunks = _pipeline_result["all_chunks"]
         split_logs = _pipeline_result["split_logs"]
         llm_processor.num_splits = NUM_SPLITS
+
+        _show_processing()
 
         # 調査名抽出（各PDFの先頭5000文字から、JDCATベクトル検索のクエリに使用）
         SURVEY_NAME_HEAD_CHARS = 5000
@@ -279,12 +368,15 @@ if uploaded_files:
         ].reset_index(drop=True)
         logger.info("CHUNK_FILTER | before=%d | after=%d | removed=%d", before_count, len(chunks_df), before_count - len(chunks_df))
 
+        _show_processing()
+
         # =============================
         # 統制語彙変換（該当項目のみ）
         # =============================
         vocab_rows = []
         vocab_logs = []
         vocab_final_values = {}  # 統制語彙項目はLLMを通さず、この値をそのままメタデータとして出力
+        vocab_source_refs = {}  # 根拠情報: {項目名: [ChunkRef]} 統制語彙変換の元にした原文チャンク
         vocab_targets = chunks_df[chunks_df["該当項目"].isin(CONTROLLED_VOCABULARY.keys())]
         if not vocab_targets.empty:
             # 同じ項目の確信度が最大値のチャンクテキストのみをまとめて変換
@@ -306,6 +398,7 @@ if uploaded_files:
                     max_conf = filtered["確信度"].max()
                     selected = filtered[filtered["確信度"] == max_conf]
                 field_combined[field_name] = "\n---\n".join(selected["テキスト"].tolist())
+                vocab_source_refs[field_name] = chunk_refs_from_df(selected)
                 field_max_confidence[field_name] = filtered["確信度"].max()
 
             with ThreadPoolExecutor(max_workers=5) as executor:
@@ -352,7 +445,7 @@ if uploaded_files:
         # チャンクを該当項目ごとにマッピング
         # =============================
 
-        # field_chunks_map: {項目名: [(テキスト, 通番), ...]}
+        # field_chunks_map: {項目名: [ChunkRef(テキスト, 通番, ソースファイル, 確信度, 判定項目), ...]}
         field_chunks_map = {}
         for field_name, group in chunks_df.groupby("該当項目"):
             # 統制語彙がある項目は変換済みチャンクのみ使用
@@ -363,7 +456,7 @@ if uploaded_files:
             if not filtered.empty:
                 max_conf = filtered["確信度"].max()
                 filtered = filtered[filtered["確信度"] == max_conf]
-            field_chunks_map[field_name] = list(zip(filtered["テキスト"].tolist(), filtered["ドキュメント内通番"].astype(int).tolist(), filtered["ソースファイル"].tolist()))
+            field_chunks_map[field_name] = chunk_refs_from_df(filtered)
         # 調査機器には調査方法の原文チャンクを使用
         method_original = chunks_df[
             (chunks_df["該当項目"] == "調査方法") & (chunks_df["種別"] == "原文")
@@ -372,7 +465,7 @@ if uploaded_files:
         if not method_filtered.empty:
             method_max = method_filtered["確信度"].max()
             method_filtered = method_filtered[method_filtered["確信度"] == method_max]
-        field_chunks_map["調査機器"] = list(zip(method_filtered["テキスト"].tolist(), method_filtered["ドキュメント内通番"].astype(int).tolist(), method_filtered["ソースファイル"].tolist()))
+        field_chunks_map["調査機器"] = chunk_refs_from_df(method_filtered)
 
         # 調査日と対象時期は両方のチャンクを統合して共通テキストにする
         date_fields = ["調査日", "対象時期"]
@@ -383,7 +476,7 @@ if uploaded_files:
         if not date_filtered.empty:
             date_max = date_filtered["確信度"].max()
             date_filtered = date_filtered[date_filtered["確信度"] == date_max]
-        shared_date_items = list(zip(date_filtered["テキスト"].tolist(), date_filtered["ドキュメント内通番"].astype(int).tolist(), date_filtered["ソースファイル"].tolist()))
+        shared_date_items = chunk_refs_from_df(date_filtered)
         for f in date_fields:
             field_chunks_map[f] = shared_date_items
 
@@ -415,6 +508,7 @@ if uploaded_files:
             return "\n".join(parts)
 
         field_chunk_texts = {}
+        field_used_refs = {}  # 根拠情報: {項目名: [ChunkRef]} 項目抽出に渡したチャンク
         for field in METADATA_FIELDS:
             field_name = field["name"]
             matched_items = field_chunks_map.get(field_name, [])
@@ -429,9 +523,10 @@ if uploaded_files:
                     seen.add(key)
                     merged.append(item)
                 matched_items = merged
+            field_used_refs[field_name] = list(matched_items)
             if matched_items:
                 texts_with_ctx = []
-                for chunk_text, doc_no, src_file in matched_items:
+                for chunk_text, doc_no, src_file, *_ in matched_items:
                     if doc_no > 0 and src_file:
                         texts_with_ctx.append(_build_chunk_with_context(chunk_text, doc_no, src_file))
                     else:
@@ -453,14 +548,22 @@ if uploaded_files:
             "配布者": ["配布"],
             "寄託者": ["寄託"],
         }
+        skipped_fields = {}  # 根拠情報: {項目名: スキップ理由}
         for fname, ftxt in list(field_chunk_texts.items()):
             if fname in KEYWORD_REQUIRED_FIELDS:
                 keywords = KEYWORD_REQUIRED_FIELDS[fname]
                 if not any(kw in ftxt for kw in keywords):
                     field_chunk_texts[fname] = ""
+                    skipped_fields[fname] = (
+                        "参照候補の記述にキーワード（"
+                        + "・".join(f"「{kw}」" for kw in keywords)
+                        + "）が含まれないため、入力文書からの生成をスキップしました。"
+                    )
                     logger.info("FIELD_SKIP_NO_KEYWORD | field=%s | keywords=%s", fname, keywords)
 
         field_desc_map = {f["name"]: f["desc"] for f in METADATA_FIELDS}
+
+        _show_processing()
 
         # =============================
         # Phase 1: タイトル・その他のタイトルを先に抽出
@@ -485,6 +588,8 @@ if uploaded_files:
                 all_field_prompts[field_name] = prompt_text
                 all_field_responses[field_name] = raw_response
                 all_field_usage[field_name] = usage
+
+        _show_processing()
 
         # =============================
         # OAI-PMH 外部リポジトリ検索
@@ -654,6 +759,8 @@ if uploaded_files:
                         )
                         external_records.append({
                             "source": source,
+                            "record_id": rid,
+                            "title": rec_title,
                             "label": f"タイトル: {rec_title[:80]}",
                             "fields": _normalize_external_fields(rec.get("fields") or {}),
                         })
@@ -718,6 +825,8 @@ if uploaded_files:
             metadata_obj["関連情報"][:120], len(external_uri_parts), len(external_topic_parts),
         )
 
+        _show_processing()
+
         # =============================
         # Phase 2: タイトル以外のフィールドを並列抽出（外部リポジトリ例を背景に使う）
         # =============================
@@ -770,6 +879,8 @@ if uploaded_files:
                 metadata_obj[field_name][:120],
             )
 
+        # 根拠情報用に統合前の LLM 生成値を保持
+        pre_merge_values = {f: metadata_obj.get(f, "") for f in ("URI", "トピック")}
         _merge_with_external("URI", external_uri_parts)
         _merge_with_external("トピック", external_topic_parts)
 
@@ -858,7 +969,7 @@ if uploaded_files:
                 field_name = field["name"]
                 matched = field_chunks_map.get(field_name, [])
                 lf.write(f"【項目: {field_name}】 マッチ数: {len(matched)}\n")
-                for rank, (chunk_text, doc_no, src_file) in enumerate(matched, 1):
+                for rank, (chunk_text, doc_no, src_file, *_) in enumerate(matched, 1):
                     lf.write(f"  チャンク {rank} (通番{doc_no}, {src_file}): {chunk_text[:200]}\n")
                 lf.write("=" * 80 + "\n\n")
 
@@ -1089,11 +1200,75 @@ if uploaded_files:
         print(f"合計: 呼び出し={total_calls}回 / 入力={total_input:,}tok / 出力={total_output:,}tok / 料金=${total_cost_usd:.4f} USD")
         print("=" * 60)
         status_placeholder.markdown('<div class="status-done">処理完了</div>', unsafe_allow_html=True)
+        button_placeholder.button(
+            "メタデータ生成開始",
+            type="primary",
+            use_container_width=True,
+            on_click=_request_run,
+            key="run_button_after_done",
+        )
 
         filenames = ", ".join(f.name for f in uploaded_files)
         st.session_state.all_results[filenames] = results
 
-        logger.info("LOG_FILES_WRITTEN | log1=%s | log2=%s | log3=%s | log4=%s | log5=%s | log6=%s | log7=%s | log8=%s", log1_path, log2_path, log3_path, log4_path, log5_path, log6_path, log7_path, log8_path)
+        # ── 根拠情報: 各項目の参照箇所を構築し、管理者向け JSON を保存 ──
+        evidence_path = None
+        try:
+            selected_external = []
+            for entry in jdcat_vector_search_log:
+                for h in entry.get("top_hits") or []:
+                    selected_external.append({
+                        "source": h.get("source", ""),
+                        "record_id": h.get("id", ""),
+                        "title": h.get("title", ""),
+                        "origin": h.get("origin", ""),
+                        "rank": h.get("rank"),
+                        "reason": h.get("reason", ""),
+                    })
+            run_info = EvidenceBuilder.build_run_info(
+                model={"label": selected_model, "model_id": model_config["model_id"]},
+                pdf_bytes=all_pdf_bytes,
+                page_counts={k: len(v) for k, v in text_extractor.all_page_texts.items()},
+                external_search={
+                    "enabled": bool(use_oai_search),
+                    "repositories": list(selected_repos),
+                    "queries": [e.get("query", "") for e in jdcat_vector_search_log],
+                    "selected_records": selected_external,
+                },
+                settings={
+                    "confidence_threshold": CONFIDENCE_THRESHOLD,
+                    "log_output_dir": log_output_dir,
+                },
+            )
+            evidence = EvidenceBuilder(
+                metadata_fields=METADATA_FIELDS,
+                values=metadata_obj,
+                field_refs=field_used_refs,
+                skipped_fields=skipped_fields,
+                vocab_sources=vocab_source_refs,
+                vocab_converted=vocab_final_values,
+                external_records=external_records,
+                external_derived_fields=EXTERNAL_DERIVED_FIELDS,
+                merged_external={"URI": external_uri_parts, "トピック": external_topic_parts},
+                pre_merge_values=pre_merge_values,
+                file_ordered_chunks=file_ordered_chunks,
+                file_chunk_pages=file_chunk_pages,
+                llm_logs={
+                    name: {
+                        "prompt": all_field_prompts.get(name, ""),
+                        "response": all_field_responses.get(name, ""),
+                        "usage": all_field_usage.get(name),
+                    }
+                    for name in all_field_prompts
+                },
+            ).build(run_info)
+            # 保存先は EvidenceStore の実装を差し替えることで変更可能（現状はローカル）
+            evidence_path = LocalEvidenceStore(f"{HOME_DIR}/output").save(evidence, log_timestamp)
+            st.session_state.all_evidence[filenames] = EvidenceBuilder.for_display(evidence)
+        except Exception as e:
+            logger.exception("EVIDENCE_BUILD_ERROR | error=%s", e)
+
+        logger.info("LOG_FILES_WRITTEN | log1=%s | log2=%s | log3=%s | log4=%s | log5=%s | log6=%s | log7=%s | log8=%s | evidence=%s", log1_path, log2_path, log3_path, log4_path, log5_path, log6_path, log7_path, log8_path, evidence_path)
 
     # ══════════════════════════════════════════════
     # 結果表示
@@ -1101,15 +1276,46 @@ if uploaded_files:
     for filename, results in st.session_state.get("all_results", {}).items():
         st.markdown(f"---\n### {filename}")
 
-        csv_data = OutputWriter.create_csv(results)
-        st.download_button(
-            "結果をCSVファイルでダウンロード",
-            data=csv_data.encode("utf-8-sig"),
-            file_name=f"metadata_{filename.replace('.pdf', '')}.csv",
-            mime="text/csv",
-            use_container_width=True,
-        )
+        base_name = f"metadata_{filename.replace('.pdf', '')}"
+        # ボタン名は Markdown として描画されるため、行末スペース2つ＋改行で「でダウンロード」を2行目に送る
+        col_csv, col_tsv, col_json = st.columns(3)
+        with col_csv:
+            st.download_button(
+                "CSV  \nでダウンロード",
+                data=OutputWriter.create_csv(results).encode("utf-8-sig"),
+                file_name=f"{base_name}.csv",
+                mime="text/csv",
+                use_container_width=True,
+                key=f"download_csv_{filename}",
+            )
+        with col_tsv:
+            # WEKO3 一括登録用（JDCat(22)）。サンプルに合わせて BOM なし UTF-8
+            st.download_button(
+                "TSV(JAIRO Cloud形式)  \nでダウンロード",
+                data=OutputWriter.create_tsv(results).encode("utf-8"),
+                file_name=f"{base_name}_jdcat22.tsv",
+                mime="text/tab-separated-values",
+                use_container_width=True,
+                key=f"download_tsv_{filename}",
+            )
+        with col_json:
+            # CDIF Core 1.1 準拠の JSON-LD。
+            st.download_button(
+                "JSON(CDIF形式)  \nでダウンロード",
+                data=OutputWriter.create_json(results).encode("utf-8"),
+                file_name=f"{base_name}_cdif.jsonld",
+                mime="application/ld+json",
+                use_container_width=True,
+                key=f"download_json_{filename}",
+            )
 
         for r in results:
             st.markdown(f'<div class="field-label">{html.escape(r["name"])}：</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="field-value">{html.escape(r["value"])}</div>', unsafe_allow_html=True)
+            field_evidence = find_field_evidence(
+                st.session_state.get("all_evidence", {}).get(filename), r["name"]
+            )
+            if field_evidence:
+                with st.expander("根拠情報"):
+                    # evidence_to_html 内で LLM/PDF 由来のテキストはすべて html.escape 済み
+                    st.markdown(evidence_to_html(field_evidence), unsafe_allow_html=True)

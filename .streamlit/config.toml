@@ -1,2 +1,5 @@
 [server]
 port = 8502
+# アップロード上限（MB）。Streamlit による 1ファイル単位の上限に加え、
+# custom/validator.py の合計サイズ上限としてもこの値を使う
+maxUploadSize = 30
