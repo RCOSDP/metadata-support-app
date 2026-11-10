@@ -260,9 +260,35 @@ def has_japanese(text: str) -> bool:
     return bool(_JA_CHAR_RE.search(text or ""))
 
 
-def detect_language(text: str) -> str:
-    """値の言語コードを返す（日本語文字を含めば ja、それ以外は en）。"""
-    return "ja" if has_japanese(text) else "en"
+# 英字のみ 2 文字以上の単語（英語の語として読めるかの判定に使用）
+_LATIN_WORD_RE = re.compile(r"[A-Za-z]{2,}")
+# 英語とみなすのに必要な英字単語数（"JSPS KAKENHI" は en、"JGSS-2010" や DOI は言語中立）
+_LATIN_MIN_WORDS = 2
+
+
+def has_latin_words(text: str, min_words: int = _LATIN_MIN_WORDS) -> bool:
+    """英字のみの単語（2 文字以上）が min_words 個以上含まれるかを判定する。"""
+    return len(_LATIN_WORD_RE.findall(text or "")) >= min_words
+
+
+def detect_language(text: str, default: str = "en") -> str:
+    """値の言語コードを 3 段で判定する。
+
+    1. 日本語文字（かな・漢字）を含めば ja
+    2. 英字単語が 2 つ以上あれば en
+    3. どちらでもない言語中立な値（識別子・番号・略称のみ等）は default
+       （TSV 変換ではレコードの主言語を渡す）
+    """
+    if has_japanese(text):
+        return "ja"
+    if has_latin_words(text):
+        return "en"
+    return default
+
+
+def detect_record_language(*texts: str) -> str:
+    """レコードの主言語を返す（タイトル・概要などに日本語文字があれば ja、なければ en）。"""
+    return "ja" if any(has_japanese(t or "") for t in texts) else "en"
 
 
 def looks_like_organization(name: str) -> bool:
