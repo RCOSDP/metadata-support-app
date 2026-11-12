@@ -14,6 +14,7 @@ from pathlib import Path
 
 from metadata_support.exporters.value_parsers import (
     detect_language,
+    detect_record_language,
     extract_doi,
     looks_like_organization,
     parse_date_range,
@@ -102,6 +103,12 @@ class _Values:
 def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
     m = results_to_map(results)
     v = _Values()
+    # レコードの主言語（タイトル・概要に日本語があれば ja）。
+    # 自由記述項目の言語コードは値ごとに判定し、識別子・番号など言語中立な値はこの主言語に揃える。
+    rec_lang = detect_record_language(m.get("タイトル", ""), m.get("概要", ""))
+
+    def lang(text: str) -> str:
+        return detect_language(text, rec_lang)
 
     # 【共通】固定値
     v.set(".publish_status", "private")
@@ -110,15 +117,15 @@ def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
     v.set(f".metadata.{ITEM_RESOURCE_TYPE}.resourcetype", RESOURCE_TYPE_DATASET)
     v.set(f".metadata.{ITEM_RESOURCE_TYPE}.resourceuri", RESOURCE_TYPE_DATASET_URI)
 
-    # 1 タイトル（日本語のみ。英語タイトル [1] はアプリが生成しないため出力しない）
+    # 1 タイトル（アプリは 1 件のみ生成するため [0] に出力し、言語コードは値から判定）
     if m.get("タイトル"):
         v.item(ITEM_TITLE, 0, "subitem_title", m["タイトル"])
-        v.item(ITEM_TITLE, 0, "subitem_title_language", "ja")
+        v.item(ITEM_TITLE, 0, "subitem_title_language", lang(m["タイトル"]))
 
     # 2 その他のタイトル
     for i, t in enumerate(split_multi(m.get("その他のタイトル"))):
         v.item(ITEM_ALT_TITLE, i, "subitem_alternative_title", t)
-        v.item(ITEM_ALT_TITLE, i, "subitem_alternative_title_language", "ja")
+        v.item(ITEM_ALT_TITLE, i, "subitem_alternative_title_language", lang(t))
 
     # 6 整理番号 → 調査番号[n]（付与機関=配布者）、12 引用上の注意中の DOI → 調査番号[n]（付与機関=DOI）
     distributors = split_multi(m.get("配布者"))
@@ -130,20 +137,20 @@ def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
         study_ids.append((doi, "DOI"))
     for i, (no, agency) in enumerate(study_ids):
         v.item(ITEM_STUDY_ID, i, "subitem_1586156939407", no)
-        v.item(ITEM_STUDY_ID, i, "subitem_1586311767281", "ja")
+        v.item(ITEM_STUDY_ID, i, "subitem_1586311767281", lang(no))
         v.item(ITEM_STUDY_ID, i, "subitem_1591256665864", agency)
 
     # 3 作成者（組織名と判定できる場合のみ名前タイプ=Organizational）
     for i, name in enumerate(split_multi(m.get("作成者"))):
         v.item(ITEM_CREATOR, i, "creatorNames[0].creatorName", name)
-        v.item(ITEM_CREATOR, i, "creatorNames[0].creatorNameLang", "ja")
+        v.item(ITEM_CREATOR, i, "creatorNames[0].creatorNameLang", lang(name))
         if looks_like_organization(name):
             v.item(ITEM_CREATOR, i, "creatorNames[0].creatorNameType", "Organizational")
 
     # 7 編集者 → 出版者
     for i, name in enumerate(split_multi(m.get("編集者"))):
         v.item(ITEM_PUBLISHER, i, "subitem_publisher", name)
-        v.item(ITEM_PUBLISHER, i, "subitem_publisher_language", "ja")
+        v.item(ITEM_PUBLISHER, i, "subitem_publisher_language", lang(name))
 
     # 10 権利情報 / 32 利用条件（同文なら統合、異なれば権利情報[n]として追加）
     rights: list[str] = []
@@ -153,35 +160,35 @@ def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
             rights.append(text)
     for i, text in enumerate(rights):
         v.item(ITEM_RIGHTS, i, "subitem_rights", text)
-        v.item(ITEM_RIGHTS, i, "subitem_rights_language", "ja")
+        v.item(ITEM_RIGHTS, i, "subitem_rights_language", lang(text))
 
     # 4 研究助成機関 / 5 研究費番号 → Fund Agency[n]
     for i, (funder, grant) in enumerate(pair_funding(m.get("研究助成機関"), m.get("研究費番号"))):
         sub_name = "subitem_1591282476079[0]"
         v.item(ITEM_FUND, i, f"{sub_name}.subitem_1592367160950", funder)
         if funder:
-            v.item(ITEM_FUND, i, f"{sub_name}.subitem_1592462961468", detect_language(funder))
+            v.item(ITEM_FUND, i, f"{sub_name}.subitem_1592462961468", lang(funder))
         v.item(ITEM_FUND, i, "subitem_1591282477038.subitem_1592367183821", grant)
 
     # 8 配布者 → Distributor[n]
     for i, name in enumerate(distributors):
         v.item(ITEM_DISTRIBUTOR, i, "subitem_1591320918354", "Distributor")
         v.item(ITEM_DISTRIBUTOR, i, "subitem_1592369405220", name)
-        v.item(ITEM_DISTRIBUTOR, i, "subitem_1592369407829", "ja")
+        v.item(ITEM_DISTRIBUTOR, i, "subitem_1592369407829", lang(name))
 
     # 9 寄託者 → Depositor[n]
     for i, name in enumerate(split_multi(m.get("寄託者"))):
         v.item(ITEM_DEPOSITOR, i, "subitem_1602143328410", name)
-        v.item(ITEM_DEPOSITOR, i, "subitem_1602143330068", "ja")
+        v.item(ITEM_DEPOSITOR, i, "subitem_1602143330068", lang(name))
 
     # 11 バージョン情報 → Version[0]
     if m.get("バージョン情報"):
         v.item(ITEM_VERSION, 0, "subitem_1591254914934", m["バージョン情報"])
-        v.item(ITEM_VERSION, 0, "subitem_1591254915406", "ja")
+        v.item(ITEM_VERSION, 0, "subitem_1591254915406", lang(m["バージョン情報"]))
 
     # 12 引用上の注意 → テキスト[0]
     if m.get("引用上の注意"):
-        v.item(ITEM_TEXT, 0, "subitem_text_language", "ja")
+        v.item(ITEM_TEXT, 0, "subitem_text_language", lang(m["引用上の注意"]))
         v.item(ITEM_TEXT, 0, "subitem_text_value", m["引用上の注意"])
 
     # 14 トピック → Topic CESSDA J / E
@@ -206,7 +213,7 @@ def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
     # 15 概要 → Summary DDI[0]
     if m.get("概要"):
         v.item(ITEM_SUMMARY, 0, "subitem_1551255577890", m["概要"])
-        v.item(ITEM_SUMMARY, 0, "subitem_1551255592625", "ja")
+        v.item(ITEM_SUMMARY, 0, "subitem_1551255592625", lang(m["概要"]))
         v.item(ITEM_SUMMARY, 0, "subitem_1551255637472", "Abstract")
 
     # 16 対象時期 → Time Period[0]=start, [1]=end
@@ -224,7 +231,7 @@ def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
     # 18 対象地域 → Geographic Coverage J
     for i, text in enumerate(split_multi(m.get("対象地域"))):
         v.item(ITEM_GEO_J, i, "subitem_1603960211179", text)
-        v.item(ITEM_GEO_J, i, "subitem_1603960230666", "ja")
+        v.item(ITEM_GEO_J, i, "subitem_1603960230666", lang(text))
 
     # 19 観察単位 → 観察単位（日本語統制語彙）。英語統制語彙は対応表が無いため空欄
     for i, text in enumerate(split_multi(m.get("観察単位"))):
@@ -234,7 +241,7 @@ def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
     # 20 母集団 → Universe[0]
     if m.get("母集団"):
         v.item(ITEM_UNIVERSE, 0, "subitem_1596608974429", m["母集団"])
-        v.item(ITEM_UNIVERSE, 0, "subitem_1596608975087", "ja")
+        v.item(ITEM_UNIVERSE, 0, "subitem_1596608975087", lang(m["母集団"]))
 
     # 21 データタイプ / 24 サンプリング方法 / 25 調査方法（日本語のみ）
     for name, item_id, sub_value, sub_lang in (
@@ -249,7 +256,7 @@ def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
     # 29 回収率 → Sampling Rate[0]
     if m.get("回収率"):
         v.item(ITEM_SAMPLING_RATE, 0, "subitem_1596609826487", m["回収率"])
-        v.item(ITEM_SAMPLING_RATE, 0, "subitem_1596609827068", "ja")
+        v.item(ITEM_SAMPLING_RATE, 0, "subitem_1596609827068", lang(m["回収率"]))
 
     # 30 アクセス権 → Access E（COAR の英語ラベルと URI）。Access J は空欄
     a_idx = 0
@@ -268,7 +275,7 @@ def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
         title_sub = "subitem_1591282133676[0]"
         v.item(ITEM_RELATED_STUDY, i, f"{title_sub}.subitem_1592383512395", title)
         if title:
-            v.item(ITEM_RELATED_STUDY, i, f"{title_sub}.subitem_1592383527694", "ja")
+            v.item(ITEM_RELATED_STUDY, i, f"{title_sub}.subitem_1592383527694", lang(title))
         if url:
             v.item(ITEM_RELATED_STUDY, i, "subitem_1592384097524.subitem_1592384631145", url)
             v.item(ITEM_RELATED_STUDY, i, "subitem_1592384097524.subitem_1592384631850", "URI")
@@ -277,7 +284,7 @@ def _build_values(results: list[dict], conversion_date: date) -> dict[str, str]:
     for i, text in enumerate(split_multi(m.get("関連文献"))):
         title_sub = "subitem_1591282556350[0]"
         v.item(ITEM_RELATED_PUBL, i, f"{title_sub}.subitem_1592383876755", text)
-        v.item(ITEM_RELATED_PUBL, i, f"{title_sub}.subitem_1592383877507", "ja")
+        v.item(ITEM_RELATED_PUBL, i, f"{title_sub}.subitem_1592383877507", lang(text))
 
     # 13 URI → 制限公開用のコンテンツファイル[n].本文URL（アクセス=open_access）
     for i, url in enumerate(split_multi(m.get("URI"))):
