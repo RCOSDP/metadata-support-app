@@ -125,6 +125,10 @@ uv run streamlit run metadata_support/src/metadata_support/app/app_custom_no_vec
 ### メタデータ生成までの操作手順
 
 1. PDFファイルをアップロード
+    - 複数ファイルの合計サイズは30MB（31,457,280バイト）まで
+    - 以下に該当するファイルが1つでも含まれる場合はエラーを表示し、「メタデータ生成開始」ボタンは押せない
+        - 合計サイズが30MBを超える
+        - PDFファイルではない／破損していて読み込めない／パスワードで保護されている
 2. サイドバーで設定を調整：
     - **LLMモデル**
     メタデータ生成に利用するLLMモデルを選択
@@ -139,7 +143,21 @@ uv run streamlit run metadata_support/src/metadata_support/app/app_custom_no_vec
             - RUDA
             - CSRDA
 3. 「メタデータ生成開始」ボタンを押す
-4. 生成完了後、CSVでダウンロード
+4. 生成完了後、用途に応じたボタンでダウンロード
+    - 「CSV でダウンロード」：34項目の No・項目名・DDI-Cパス・生成結果の一覧
+    - 「TSV(JAIRO Cloud形式) でダウンロード」：JAIRO Cloud（WEKO3）の一括登録用 TSV（アイテムタイプ JDCat(22)）
+    - 「JSON(CDIF形式) でダウンロード」：CDIF Core 1.1 準拠の JSON-LD
+
+### 保守上の注意
+
+- ファイルアップロード欄の案内文・ボタン・エラーメッセージは、Streamlit 標準では英語で表示されるため、CSS で日本語表記に置き換えている（`app_custom_no_vector.py` の `st.file_uploader` 直前のスタイル定義）。
+- この置き換えは Streamlit 内部の画面構造（1.55.0 で確認）に依存している。Streamlit のバージョンを更新した場合は、アップロード欄が日本語で表示されることを確認すること。英語に戻っている場合はスタイル定義のセレクタを修正する。
+
+# テストの実行
+
+```
+uv run pytest
+```
 
 # ログ出力仕様
 

@@ -19,3 +19,12 @@ dependencies = [
     "importlib-metadata>=8.7.1",
     "httpx>=0.24.1",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["metadata_support/src"]

@@ -45,6 +45,8 @@ class PDFTextExtractor:
         self.uploaded_files = uploaded_files
         self.all_pdf_bytes: dict[str, bytes] = {}
         self.all_full_texts: dict[str, str] = {}
+        # {ファイル名: [1ページ目の生テキスト, 2ページ目, ...]}（根拠情報のページ番号算出用）
+        self.all_page_texts: dict[str, list[str]] = {}
         self.combined_text: str = ""
 
     @classmethod
@@ -65,17 +67,22 @@ class PDFTextExtractor:
           - all_pdf_bytes: {ファイル名: bytes}
           - all_full_texts: {ファイル名: 正規化済みテキスト}
           - combined_text: 全テキストを改行で連結し、連続改行を圧縮したもの
+
+        ページ毎の生テキストは `self.all_page_texts` に保持する（戻り値は従来通り3要素）。
         """
         for uploaded_file in sorted(self.uploaded_files, key=lambda f: f.name):
             pdf_bytes = uploaded_file.read()
             self.all_pdf_bytes[uploaded_file.name] = pdf_bytes
-            full_text = self._extract_pdf_text(pdf_bytes)
+            page_texts = self._extract_pdf_pages(pdf_bytes)
+            full_text = "".join(page_texts)
             if self._is_garbled(full_text):
                 logger.warning(
                     "OCR_FALLBACK | file=%s | reason=garbled_text | original_chars=%d",
                     uploaded_file.name, len(full_text),
                 )
-                full_text = self._extract_pdf_text_ocr(pdf_bytes, uploaded_file.name)
+                page_texts = self._extract_pdf_pages_ocr(pdf_bytes, uploaded_file.name)
+                full_text = "\n\n".join(page_texts)
+            self.all_page_texts[uploaded_file.name] = page_texts
             full_text = TextPreprocessor.strip_survey_questions(full_text, uploaded_file.name)
             full_text = TextPreprocessor.normalize_pdf_text(full_text, uploaded_file.name)
             self.all_full_texts[uploaded_file.name] = full_text
@@ -86,11 +93,11 @@ class PDFTextExtractor:
         return self.all_pdf_bytes, self.all_full_texts, self.combined_text
 
     @staticmethod
-    def _extract_pdf_text(pdf_bytes: bytes) -> str:
-        """PDFバイト列から全ページの生テキストを抽出する。"""
+    def _extract_pdf_pages(pdf_bytes: bytes) -> list[str]:
+        """PDFバイト列からページ毎の生テキストを抽出する。"""
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         try:
-            return "".join(page.get_text() for page in doc)
+            return [page.get_text() for page in doc]
         finally:
             doc.close()
 
@@ -107,8 +114,8 @@ class PDFTextExtractor:
         return garbled / len(text) > _GARBLED_RATIO_THRESHOLD
 
     @staticmethod
-    def _extract_pdf_text_ocr(pdf_bytes: bytes, fname: str) -> str:
-        """Tesseract で各ページを OCR してテキストを返す。
+    def _extract_pdf_pages_ocr(pdf_bytes: bytes, fname: str) -> list[str]:
+        """Tesseract で各ページを OCR してページ毎のテキストを返す。
 
         - 各ページを fitz で 300DPI レンダリング → PIL Image
         - グレースケール化のみ (2値化はテキスト品質を落とす場合があるため避ける)
@@ -137,9 +144,9 @@ class PDFTextExtractor:
             for idx, text in executor.map(ocr_one, enumerate(page_images)):
                 results.append((idx, text))
         results.sort(key=lambda x: x[0])
-        full_text = "\n\n".join(text for _, text in results)
+        page_texts = [text for _, text in results]
         logger.info(
             "OCR_DONE | file=%s | pages=%d | chars=%d",
-            fname, page_count, len(full_text),
+            fname, page_count, sum(len(t) for t in page_texts),
         )
-        return full_text
+        return page_texts
